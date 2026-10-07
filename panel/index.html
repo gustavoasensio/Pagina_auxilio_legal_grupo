@@ -58,6 +58,8 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
 .tabla th{font-size:.8rem;color:var(--muted);font-weight:650}
 .clave{font-family:ui-monospace,Menlo,monospace;font-size:1.2rem;background:var(--fog);padding:.4rem .7rem;border-radius:8px;display:inline-block;letter-spacing:.04em}
 .btn-s{min-height:38px;padding:0 .9rem;font-size:.9rem}
+.nov-p{list-style:none;margin:0;padding:0}.nov-p li{border-left:3px solid var(--line);padding:0 0 10px 12px}.nov-p time{font-size:.78rem;color:var(--muted)}.nov-p p{margin:0;white-space:pre-line;font-size:.92rem;color:var(--ink)}
+.ped{border-top:1px solid var(--line);padding:10px 0;display:grid;gap:4px}.ped.recibido b{color:#1d7a4c}.ped.cancelado{opacity:.5}.ped .btn{justify-self:start}
 .vacio{background:#fff;border:1px dashed #c7ccda;border-radius:12px;padding:18px;color:var(--muted)}
 </style>
 </head>
@@ -99,6 +101,7 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
         <input type="search" id="q" placeholder="Buscar por número, nombre, patente o teléfono">
         <select id="f-estado"><option value="">Todos los estados</option><option value="nuevo">Nuevos</option><option value="revision">En revisión</option><option value="tomado">Tomados</option><option value="descartado">Descartados</option></select>
         <label><input type="checkbox" id="f-pend"> Denuncia pendiente</label>
+        <label><input type="checkbox" id="f-bienv"> Sin bienvenida</label>
       </div>
       <div class="lista" id="lista"></div>
     </div>
@@ -191,9 +194,9 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
     ]).then(function(r){ CASOS=r[0]||[]; PAS={}; (r[1]||[]).forEach(function(p){ PAS[p.codigo]=p; }); pintarLista();
       var q=new URLSearchParams(location.search).get("caso"); if(q){ var c=CASOS.find(function(x){return x.numero===q;}); if(c) detalle(c); history.replaceState(null,"","/panel"); }
     }).catch(function(e){ $("lista").replaceChildren(h("p",{class:"err",text:"No se pudieron cargar los casos: "+e.message})); }); }
-  ["q","f-estado","f-pend"].forEach(function(id){ $(id).addEventListener("input",pintarLista); });
+  ["q","f-estado","f-pend","f-bienv"].forEach(function(id){ $(id).addEventListener("input",pintarLista); });
   function pintarLista(){ var q=$("q").value.trim().toLowerCase(), est=$("f-estado").value, pend=$("f-pend").checked, ul=$("lista");
-    var l=CASOS.filter(function(c){ if(est&&(c.estado||"nuevo")!==est) return false; if(pend&&c.denuncia_hecha) return false;
+    var l=CASOS.filter(function(c){ if(est&&(c.estado||"nuevo")!==est) return false; if(pend&&c.denuncia_hecha) return false; if($("f-bienv").checked&&c.bienvenida_wa_en) return false;
       if(!q) return true; return [c.numero,c.asegurado_nombre,c.dominio,c.asegurado_telefono,c.tercero_dominio].join(" ").toLowerCase().indexOf(q)>=0; });
     ul.replaceChildren();
     if(!l.length){ ul.appendChild(h("p",{class:"vacio",text:CASOS.length?"No hay casos con ese filtro.":"Todavía no entraron casos. Cuando alguien cargue un siniestro, aparece acá."})); return; }
@@ -202,7 +205,7 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
       ul.appendChild(h("button",{class:"fila",type:"button",onclick:function(){ detalle(c); }},[
         h("span",{class:"n",text:c.numero||"sin número"}),
         h("span",{class:"q",text:c.asegurado_nombre}),
-        h("span",{},[ h("span",{class:"tag t-est",text:ESTADOS[c.estado]||c.estado||"Nuevo"}), c.denuncia_hecha?null:h("span",{class:"tag t-pend",text:"denuncia pendiente"}), c.hubo_lesiones?h("span",{class:"tag t-les",text:"lesionados"}):null ]),
+        h("span",{},[ h("span",{class:"tag t-est",text:ESTADOS[c.estado]||c.estado||"Nuevo"}), c.denuncia_hecha?null:h("span",{class:"tag t-pend",text:"denuncia pendiente"}), c.hubo_lesiones?h("span",{class:"tag t-les",text:"lesionados"}):null, c.bienvenida_wa_en?null:h("span",{class:"tag t-pend",text:"sin bienvenida"}) ]),
         small])); }); }
 
   function dl(pares){ var d=h("dl"); pares.forEach(function(p){ if(p[1]===null||p[1]===undefined||p[1]==="") return; d.appendChild(h("dt",{text:p[0]})); d.appendChild(h("dd",{},[p[1]])); }); if(!d.children.length) d.appendChild(h("dd",{class:"mini",style:"grid-column:1/3",text:"Sin datos cargados."})); return d; }
@@ -236,6 +239,16 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
       h("div",{style:"margin:16px 0 14px"},[ h("h2",{text:(c.numero||"Sin número")+" · "+c.asegurado_nombre}),
         h("p",{class:"mini",text:"Cargado el "+hora(c.creado_en)+" · origen "+(c.origen||"web")}),
         h("div",{class:"actions",style:"margin-top:.6rem"},[ waC?h("a",{class:"btn btn-wa btn-s",href:waC,target:"_blank",rel:"noopener",text:"WhatsApp al cliente"}):null,
+          (waC&&!c.bienvenida_wa_en)?h("button",{class:"btn btn-road btn-s",type:"button",text:"Mandar bienvenida",onclick:function(ev){
+            var nom=(c.asegurado_nombre||"").split(" ")[0], btn=ev.currentTarget;
+            var txt="Hola "+nom+", soy del equipo de AuxilioLegal. Recibimos los datos de tu siniestro: tu número de caso es "+(c.numero||"")+".\n\n"+
+              "Ya estamos revisando la documentación. En las próximas horas te contamos si podemos tomar el caso y cómo trabajamos, siempre por escrito y sin adelantos.\n\n"+
+              (c.denuncia_hecha?"":"Importante: si todavía no denunciaste el choque en tu seguro, hacelo dentro de los 3 días.\n\n")+
+              "Mientras tanto, no firmes nada con la aseguradora sin consultarnos y guardá los tickets de traslados y gastos.\n\n"+
+              (segUrl?"Seguí tu caso acá (guardá el enlace, es personal):\n"+segUrl+"\n\n":"")+"Cualquier duda, escribinos por acá.";
+            window.open(waC+"?text="+encodeURIComponent(txt),"_blank");
+            api("/rest/v1/siniestros_web?id=eq."+c.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{bienvenida_wa_en:new Date().toISOString()}})
+              .then(function(){ c.bienvenida_wa_en=new Date().toISOString(); btn.textContent="Bienvenida enviada"; btn.disabled=true; }).catch(function(){}); }}):null,
           segUrl?h("a",{class:"btn btn-ghost btn-s",href:segUrl,target:"_blank",rel:"noopener",text:"Ver su seguimiento"}):null,
           (segUrl&&waC)?h("button",{class:"btn btn-wa btn-s",type:"button",text:"Mandarle su seguimiento",onclick:function(){
             var et=s?(+selEt.value):1, px=prox.value.trim();
@@ -254,8 +267,48 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
         h("div",{class:"card"},[ h("h3",{text:"Siniestro"}), dl([["Fecha",fecha(c.fecha_siniestro)+(c.hora?" · "+c.hora:"")],["Lugar",c.lugar],["Relato",c.relato],["Lesionados",si(c.hubo_lesiones)+(c.hubo_lesiones?(c.consentimiento_salud?" (con consentimiento)":" (sin consentimiento expreso)"):"")],["Policía",si(c.intervino_policia)]]) ]),
         h("div",{class:"card"},[ h("h3",{text:"El otro vehículo"}), dl([["Patente",c.tercero_dominio],["Conductor",c.tercero_nombre],["Teléfono",c.tercero_telefono],["Compañía",c.tercero_aseguradora],["Póliza",c.tercero_poliza]]) ]),
       ]),
+      h("div",{class:"grid2",style:"margin-top:16px"},[ comunicacion(c), pedidos(c) ]),
       h("div",{style:"margin-top:16px"},[fotosCard])
     ])); }
+
+  function comunicacion(c){
+    var lista=h("ul",{class:"nov-p"}), txt=h("textarea",{rows:"3",placeholder:"Ej.: Presentamos el reclamo. La aseguradora tiene 30 días para responder."}), vis=h("input",{type:"checkbox"}); vis.checked=true;
+    var msg=h("p",{class:"msg",style:"text-align:left"}), info=h("p",{class:"mini",style:"margin:.4rem 0 0"});
+    function cargar(){ api("/rest/v1/movimientos?siniestro_id=eq."+c.id+"&select=creado_en,tipo,texto,visible_cliente&order=creado_en.desc&limit=100").then(function(a){ lista.replaceChildren();
+        a.forEach(function(m){ lista.appendChild(h("li",{},[ h("time",{text:hora(m.creado_en)+(m.visible_cliente?"":" · interno")}), h("p",{text:m.texto}) ])); });
+        if(!a.length) lista.appendChild(h("li",{class:"mini",text:"Sin novedades todavía."})); }).catch(function(){});
+      api("/rest/v1/correos_log?siniestro_id=eq."+c.id+"&select=en,tipo&order=en.desc&limit=20").then(function(a){
+        info.textContent= !c.asegurado_email ? "No dejó correo: las novedades las ve solo en su panel." : (a.length ? "Correos enviados: "+a.map(function(x){return x.tipo+" ("+hora(x.en)+")";}).join(", ") : "Todavía no se le envió ningún correo."); }).catch(function(){}); }
+    var enviar=h("button",{class:"btn btn-primary btn-s",type:"button",text:"Publicar novedad",onclick:function(){
+      var t=txt.value.trim(); if(t.length<3) return say(msg,"Escribí el mensaje.",false); enviar.disabled=true;
+      api("/rest/v1/movimientos",{method:"POST",headers:{Prefer:"return=minimal"},body:{siniestro_id:c.id,tipo:"mensaje",texto:t,visible_cliente:vis.checked}})
+        .then(function(){ txt.value=""; say(msg,vis.checked?(c.asegurado_email?"Publicado. Le llega también por correo.":"Publicado en su panel."):"Guardado como nota interna.",true); cargar(); })
+        .catch(function(e){ say(msg,"No se pudo: "+e.message,false); }).then(function(){ enviar.disabled=false; }); }});
+    cargar();
+    return h("div",{class:"card"},[ h("h3",{text:"Novedades para el cliente"}), txt,
+      h("label",{class:"chk",style:"margin:.6rem 0"},[vis,h("span",{text:"Que la vea el cliente (y le llegue por correo)"})]), enviar, msg, info,
+      h("div",{style:"margin-top:1rem;max-height:340px;overflow:auto"},[lista]) ]); }
+
+  function pedidos(c){
+    var lista=h("div"), inp=h("input",{placeholder:"Ej.: Presupuesto del taller"}), msg=h("p",{class:"msg",style:"text-align:left"});
+    function cargar(){ api("/rest/v1/pedidos_doc?siniestro_id=eq."+c.id+"&select=*&order=creado_en").then(function(a){ lista.replaceChildren();
+      if(!a.length) lista.appendChild(h("p",{class:"mini",text:"No hay pedidos."}));
+      a.forEach(function(p){ var fila=h("div",{class:"ped "+p.estado},[ h("b",{text:p.descripcion}),
+          h("span",{class:"mini",text:(p.estado==="pendiente"?"Pendiente":p.estado==="recibido"?"Recibido "+hora(p.resuelto_en):"Cancelado")+" · pedido "+hora(p.creado_en)}) ]);
+        if(p.estado==="pendiente") fila.appendChild(h("button",{class:"btn btn-ghost btn-s",type:"button",text:"Cancelar",onclick:function(){
+          api("/rest/v1/pedidos_doc?id=eq."+p.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{estado:"cancelado"}}).then(cargar); }}));
+        if(p.archivos&&p.archivos.length){ var fot=h("div",{class:"fotos",style:"margin-top:.5rem"}); fila.appendChild(fot);
+          api("/storage/v1/object/sign/siniestros",{method:"POST",body:{expiresIn:900,paths:p.archivos}}).then(function(r){ (r||[]).forEach(function(x){ if(!x.signedURL) return;
+            var url=U+"/storage/v1"+x.signedURL, pdf=/\.pdf$/i.test(x.path);
+            fot.appendChild(h("a",{href:url,target:"_blank",rel:"noopener"},[ pdf?h("div",{class:"pdf",style:"height:100%",text:"PDF"}):h("img",{src:url,alt:"",loading:"lazy"}) ])); }); }); }
+        lista.appendChild(fila); }); }).catch(function(e){ lista.replaceChildren(h("p",{class:"err",text:e.message})); }); }
+    var pedir=h("button",{class:"btn btn-primary btn-s",type:"button",text:"Pedir documento",onclick:function(){
+      var d=inp.value.trim(); if(d.length<2) return say(msg,"Escribí qué documento necesitás.",false); pedir.disabled=true;
+      api("/rest/v1/pedidos_doc",{method:"POST",headers:{Prefer:"return=minimal"},body:{siniestro_id:c.id,descripcion:d}})
+        .then(function(){ inp.value=""; say(msg,"Pedido creado. El cliente lo ve en su panel"+(c.asegurado_email?" y le llega por correo.":"."),true); cargar(); })
+        .catch(function(e){ say(msg,"No se pudo: "+e.message,false); }).then(function(){ pedir.disabled=false; }); }});
+    cargar();
+    return h("div",{class:"card"},[ h("h3",{text:"Documentación pedida"}), h("div",{style:"display:flex;gap:8px"},[inp,pedir]), msg, lista ]); }
 
   /* ---- consultas ---- */
   function cargarConsultas(){ var ul=$("consultas"); ul.replaceChildren(h("p",{class:"mini",text:"Cargando…"}));

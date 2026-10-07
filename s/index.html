@@ -47,7 +47,7 @@
       <div class="field"><label for="asegurado_nombre">Nombre y apellido *</label><input id="asegurado_nombre" type="text" required placeholder="" autocomplete="name"></div>
       <div class="field"><label for="asegurado_dni">DNI</label><input id="asegurado_dni" type="text" placeholder="Solo números" inputmode="numeric" data-digits="7" data-maxd="8" data-err="Revisá el DNI: son 7 u 8 números." data-nodraft></div>
       <div class="field"><label for="asegurado_telefono">Celular / WhatsApp *</label><input id="asegurado_telefono" type="tel" required placeholder="261 000-0000" autocomplete="tel" data-err="Revisá el celular: poné la característica y el número."></div>
-      <div class="field"><label for="asegurado_email">Correo</label><input id="asegurado_email" type="email" placeholder="" autocomplete="email"></div>
+      <div class="field"><label for="asegurado_email">Correo <span style="font-weight:400;color:var(--muted)">(recomendado: te mandamos tu número de caso y las novedades)</span></label><input id="asegurado_email" type="email" placeholder="" autocomplete="email"></div>
       <div class="field"><label for="dominio">Patente de tu vehículo</label><input id="dominio" type="text" placeholder="" style="text-transform:uppercase"></div>
       <div class="field"><label for="aseguradora_propia">Tu compañía de seguros</label><input id="aseguradora_propia" type="text" placeholder="" ></div>
     </div>
@@ -85,6 +85,7 @@
       <label class="file"><input id="f_denuncia" type="file" accept="image/*,application/pdf" multiple><span class="file-ic">+</span><b>Denuncia o acta policial</b><em data-for="f_denuncia">Tocá para subir</em></label>
     </div>
     <label class="chk"><input id="consentimiento" type="checkbox" required data-nodraft><span>Acepto que mis datos y fotos se usen para evaluar y gestionar mi reclamo, conforme la <a href="/privacidad" target="_blank">política de privacidad</a>. *</span></label>
+    <label class="chk"><input id="acepta_novedades" type="checkbox"><span>Opcional: quiero recibir novedades e información útil de AuxilioLegal. Puedo darme de baja cuando quiera.</span></label>
     <label class="chk" id="salud_box" hidden><input id="consentimiento_salud" type="checkbox" data-nodraft><span>Como hubo lesionados, acepto en forma expresa que se traten los datos sobre lesiones y salud que informe, solo para este reclamo (Ley 25.326, art. 7). *</span></label>
     <p class="hint" style="font-size:.82rem">Los datos que cargues de la otra persona (nombre, teléfono, póliza) se usan solo para hacer el reclamo.</p>
   </fieldset>
@@ -139,7 +140,7 @@ AL.wizard(w,function(msg,btn){
     var ext=(b.type==="application/pdf")?"pdf":(b.type==="image/png"?"png":(/heic|heif/.test(b.type)?"heic":"jpg"));
     var p=id+"/"+x.tag+"-"+x.n+"."+ext; return AL.upload(p,b).then(function(r){ if(r.ok) paths.push(p); done++; st(); }); }).catch(function(){ done++; st(); }); }); });
   chain.then(function(){
-    var ids=["asegurado_nombre","asegurado_dni","asegurado_telefono","asegurado_email","dominio","aseguradora_propia","fecha_siniestro","hora","lugar","relato","hubo_lesiones","intervino_policia","denuncia_hecha","tercero_dominio","tercero_nombre","tercero_aseguradora","tercero_poliza","tercero_telefono"];
+    var ids=["asegurado_nombre","asegurado_dni","asegurado_telefono","asegurado_email","dominio","aseguradora_propia","fecha_siniestro","hora","lugar","relato","hubo_lesiones","intervino_policia","denuncia_hecha","tercero_dominio","tercero_nombre","tercero_aseguradora","tercero_poliza","tercero_telefono","acepta_novedades"];
     var row={id:id,pas_codigo:P||null,fotos:paths,consentimiento:true,consentimiento_salud:!!document.getElementById("consentimiento_salud").checked,origen:ORIGEN}; ids.forEach(function(k){ row[k]=AL.val(k); });
     if(row.dominio) row.dominio=row.dominio.toUpperCase(); if(row.tercero_dominio) row.tercero_dominio=row.tercero_dominio.toUpperCase();
     return AL.post("siniestros_web",row).then(function(r){ if(!r.ok) throw 0;
