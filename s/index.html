@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cargá tu siniestro — AuxilioLegal</title>
+<meta name="description" content="Cargá los datos y fotos de tu siniestro para iniciar el reclamo.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/al.css">
+<style>
+.alerta{margin-top:1.4rem;border:2px solid #d97706;background:#fff8eb;border-radius:14px;padding:18px 18px 16px}
+.alerta h3{display:flex;align-items:center;gap:.5rem;color:#8a3b00;font-size:1.12rem;margin:0 0 .5rem}
+.alerta h3 svg{width:24px;height:24px;flex:0 0 24px;fill:none;stroke:#d97706;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.alerta p{margin:0 0 .7rem;color:#4a3520}
+.alerta .vence{display:block;font-size:1.3rem;font-weight:750;color:#141a2e;font-variation-settings:"wdth" 85;margin:.2rem 0 .6rem}
+.alerta .ley{font-size:.8rem;color:#7a6650}
+.alerta .btn{width:100%;margin-top:.3rem}
+.btn-alerta{background:#d97706;color:#fff}
+.btn-alerta:hover{background:#b45309}
+.alerta .ok-msg{font-size:.9rem;color:#1d7a4c;margin:.7rem 0 0}
+[hidden]{display:none!important}
+#ok>.btn-wa{margin-top:1.2rem}
+.caso{background:var(--navy);color:#fff;border-radius:14px;padding:18px;margin:1.2rem 0 0}
+.caso span{font-size:.85rem;color:#c9cee0}
+.caso b{display:block;font-size:2rem;letter-spacing:.02em;font-variation-settings:"wdth" 80;color:var(--road);margin:.1rem 0 .4rem}
+.caso p{color:#d8dcea;font-size:.92rem;margin:0 0 .8rem}
+.caso .actions{margin-top:.4rem}
+.caso .btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+.caso .btn-wa{margin-top:.7rem;width:100%}
+</style>
+</head>
+<body class="app">
+<header><div class="wrap nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="AuxilioLegal"></a>
+<a class="btn btn-ghost" href="/">Inicio</a></div></header>
+<main><section class="tool"><div class="wrap doc">
+<div id="pasban" class="pasban" hidden></div>
+<h1>Cargá tu siniestro.</h1>
+<p class="sub">Te lleva unos minutos. Si te falta algo, podés cerrar y seguir después desde este mismo celular.</p>
+<form id="w" class="contact-box wiz" novalidate>
+  <div class="wiz-top"><span class="step-lab"></span><div class="bar-track"><div class="bar-fill"></div></div></div>
+  <fieldset class="step" data-t="Tus datos">
+    <div class="row2">
+      <div class="field"><label for="asegurado_nombre">Nombre y apellido *</label><input id="asegurado_nombre" type="text" required placeholder="" autocomplete="name"></div>
+      <div class="field"><label for="asegurado_dni">DNI</label><input id="asegurado_dni" type="text" placeholder="Solo números" inputmode="numeric" data-digits="7" data-maxd="8" data-err="Revisá el DNI: son 7 u 8 números." data-nodraft></div>
+      <div class="field"><label for="asegurado_telefono">Celular / WhatsApp *</label><input id="asegurado_telefono" type="tel" required placeholder="261 000-0000" autocomplete="tel" data-err="Revisá el celular: poné la característica y el número."></div>
+      <div class="field"><label for="asegurado_email">Correo</label><input id="asegurado_email" type="email" placeholder="" autocomplete="email"></div>
+      <div class="field"><label for="dominio">Patente de tu vehículo</label><input id="dominio" type="text" placeholder="" style="text-transform:uppercase"></div>
+      <div class="field"><label for="aseguradora_propia">Tu compañía de seguros</label><input id="aseguradora_propia" type="text" placeholder="" ></div>
+    </div>
+  </fieldset>
+  <fieldset class="step" data-t="El siniestro">
+    <div class="row2">
+      <div class="field"><label for="fecha_siniestro">Fecha *</label><input id="fecha_siniestro" type="date" required data-pasado></div>
+      <div class="field"><label for="hora">Hora aproximada</label><input id="hora" type="time" placeholder="" ></div>
+    </div>
+    <div class="field"><label for="lugar">Lugar</label><input id="lugar" type="text" placeholder="Calle y altura o intersección, localidad" ></div>
+    <div class="field"><label for="relato">¿Cómo fue?</label><textarea id="relato" placeholder="Contalo con tus palabras."></textarea></div>
+    <p class="warn" id="presc" hidden>Pasaron más de 3 años desde el siniestro: el reclamo podría estar prescripto. Envialo igual y lo evaluamos.</p>
+    <label class="chk"><input id="hubo_lesiones" type="checkbox"><span>Hubo personas lesionadas</span></label>
+    <label class="chk"><input id="intervino_policia" type="checkbox"><span>Intervino la policía</span></label>
+    <label class="chk"><input id="denuncia_hecha" type="checkbox"><span>Ya hice la denuncia en mi compañía de seguros</span></label>
+  </fieldset>
+  <fieldset class="step" data-t="El otro vehículo">
+    <p class="hint">Si no tenés estos datos, seguí igual.</p>
+    <div class="row2">
+      <div class="field"><label for="tercero_dominio">Patente</label><input id="tercero_dominio" type="text" placeholder="" style="text-transform:uppercase"></div>
+      <div class="field"><label for="tercero_nombre">Nombre del conductor</label><input id="tercero_nombre" type="text" placeholder="" ></div>
+      <div class="field"><label for="tercero_aseguradora">Su compañía de seguros</label><input id="tercero_aseguradora" type="text" placeholder="" ></div>
+      <div class="field"><label for="tercero_poliza">N° de póliza</label><input id="tercero_poliza" type="text" placeholder="" ></div>
+      <div class="field"><label for="tercero_telefono">Teléfono</label><input id="tercero_telefono" type="tel" placeholder="" data-digits="8" data-err="Revisá el teléfono del otro conductor."></div>
+    </div>
+  </fieldset>
+  <fieldset class="step" data-t="Fotos y documentos" data-check="chkSalud">
+    <p class="hint">Sacalas con el celular. Las guardamos en un espacio privado.</p>
+    <div class="files">
+      <label class="file"><input id="f_danos" type="file" accept="image/*,application/pdf" multiple><span class="file-ic">+</span><b>Fotos de los daños</b><em data-for="f_danos">Tocá para subir</em></label>
+      <label class="file"><input id="f_dni" type="file" accept="image/*,application/pdf" multiple><span class="file-ic">+</span><b>DNI (frente y dorso)</b><em data-for="f_dni">Tocá para subir</em></label>
+      <label class="file"><input id="f_carnet" type="file" accept="image/*,application/pdf" multiple><span class="file-ic">+</span><b>Licencia de conducir</b><em data-for="f_carnet">Tocá para subir</em></label>
+      <label class="file"><input id="f_cedula" type="file" accept="image/*,application/pdf" multiple><span class="file-ic">+</span><b>Cédula del vehículo</b><em data-for="f_cedula">Tocá para subir</em></label>
+      <label class="file"><input id="f_tercero" type="file" accept="image/*,application/pdf" multiple><span class="file-ic">+</span><b>Datos o seguro del otro</b><em data-for="f_tercero">Tocá para subir</em></label>
+      <label class="file"><input id="f_denuncia" type="file" accept="image/*,application/pdf" multiple><span class="file-ic">+</span><b>Denuncia o acta policial</b><em data-for="f_denuncia">Tocá para subir</em></label>
+    </div>
+    <label class="chk"><input id="consentimiento" type="checkbox" required data-nodraft><span>Acepto que mis datos y fotos se usen para evaluar y gestionar mi reclamo, conforme la <a href="/privacidad" target="_blank">política de privacidad</a>. *</span></label>
+    <label class="chk" id="salud_box" hidden><input id="consentimiento_salud" type="checkbox" data-nodraft><span>Como hubo lesionados, acepto en forma expresa que se traten los datos sobre lesiones y salud que informe, solo para este reclamo (Ley 25.326, art. 7). *</span></label>
+    <p class="hint" style="font-size:.82rem">Los datos que cargues de la otra persona (nombre, teléfono, póliza) se usan solo para hacer el reclamo.</p>
+  </fieldset>
+  <div class="wiz-nav"><button type="button" class="btn btn-ghost" data-prev>Atrás</button><button type="submit" class="btn btn-primary" data-next data-last="Enviar">Siguiente</button></div>
+  <p class="msg" role="status" aria-live="polite"></p>
+  <p class="hint" style="text-align:center;font-size:.82rem;margin:.6rem 0 0"><a href="#" id="borrar">Borrar lo que cargué en este celular</a></p>
+</form>
+<div id="ok" class="contact-box done" hidden>
+  <h2>Recibimos todo.</h2>
+  <p>Un abogado del equipo revisa tu caso y te contacta por WhatsApp dentro de las 48 horas hábiles.</p>
+  <div class="caso" id="caso" hidden>
+    <span>Tu número de caso</span><b id="c-num"></b>
+    <p>Guardá este enlace: con él seguís tu reclamo cuando quieras, igual que nosotros y tu productor.</p>
+    <div class="actions"><a class="btn btn-road" id="c-ver" target="_blank" rel="noopener">Ver mi caso</a><button class="btn btn-ghost" id="c-copy" type="button">Copiar enlace</button></div>
+    <a class="btn btn-wa" id="c-pas" target="_blank" rel="noopener" hidden>Avisarle a mi productor</a>
+  </div>
+  <div class="alerta" id="alerta" hidden>
+    <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.01"/></svg>Importante: denunciá el siniestro en tu seguro</h3>
+    <p id="al-txt">Tenés 3 días desde que ocurrió el siniestro para denunciarlo en tu compañía. Si no la hacés a tiempo, la compañía puede negarte la cobertura.</p>
+    <span class="vence" id="al-vence"></span>
+    <button class="btn btn-alerta" id="al-btn" type="button">Activar alerta</button>
+    <p class="ok-msg" id="al-ok" hidden></p>
+    <p class="ley">Ley de Seguros N° 17.418, art. 46: 3 días desde que conocés el siniestro. La demora se excusa si se debió a caso fortuito, fuerza mayor o imposibilidad sin culpa.</p>
+  </div>
+  <a class="btn btn-wa" href="https://wa.me/5492616334179?text=Hola%2C%20acabo%20de%20cargar%20mi%20siniestro." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm5.2 13.6c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.6.8 2 .9 2.1.1.1.1.3 0 .5-.1.2-.2.3-.3.5l-.5.5c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.9.9-1.2.2-.3.4-.2.7-.1.3.1 1.7.8 2 1 .3.1.5.2.6.3.1.2.1.7-.1 1.3z"/></svg>Escribinos</a>
+</div>
+</div></section></main>
+<footer><div class="wrap"><p style="font-size:.84rem;color:var(--steel)">© 2026 auxiliolegal.com.ar — <a href="/privacidad">Privacidad</a></p></div></footer>
+<script src="/assets/app.js"></script>
+<script>
+var P=new URLSearchParams(location.search).get("p")||"", w=document.getElementById("w"), PAS=null;
+if(/^[a-z0-9]{10,24}$/.test(P)) AL.rpc("pas_publico",{p_codigo:P}).then(function(a){ if(a&&a[0]){ PAS=a[0]; var b=document.getElementById("pasban");
+  b.innerHTML="<span>Te lo envía</span> <b></b>"; b.querySelector("b").textContent=a[0].nombre+(a[0].broker?" · "+a[0].broker:""); b.hidden=false; } else P=""; }).catch(function(){P="";}); else P="";
+var limpiar=AL.draft(w,"al_siniestro");
+var ORIGEN=(new URLSearchParams(location.search).get("o")||"").toLowerCase().replace(/[^a-z0-9_-]/g,"").slice(0,40)||null;
+document.getElementById("fecha_siniestro").max=AL.hoyIso();
+var les=document.getElementById("hubo_lesiones"), sbox=document.getElementById("salud_box");
+function salud(){ sbox.hidden=!les.checked; if(!les.checked) document.getElementById("consentimiento_salud").checked=false; } les.addEventListener("change",salud); salud();
+window.chkSalud=function(){ return les.checked&&!document.getElementById("consentimiento_salud").checked ? "Como hubo lesionados, necesitamos tu conformidad para tratar esos datos." : ""; };
+document.getElementById("borrar").addEventListener("click",function(e){ e.preventDefault(); limpiar(); try{ localStorage.removeItem("al_mis_casos"); }catch(x){} location.href=location.pathname+location.search; });
+document.getElementById("fecha_siniestro").addEventListener("change",function(){ var d=new Date(this.value+"T12:00:00");
+  document.getElementById("presc").hidden=!(this.value && (Date.now()-d)/864e5>3*365); });
+[].forEach.call(w.querySelectorAll(".file input"),function(i){ i.addEventListener("change",function(){ var n=i.files.length;
+  w.querySelector('[data-for="'+i.id+'"]').textContent= n? n+(n>1?" archivos listos":" archivo listo") : "Tocá para subir"; i.parentNode.classList.toggle("has",n>0); }); });
+AL.wizard(w,function(msg,btn){
+  var id=AL.uuid(), files=[]; [].forEach.call(w.querySelectorAll(".file input"),function(i){ [].forEach.call(i.files,function(fl,k){ files.push({tag:i.id.slice(2),n:k+1,file:fl}); }); });
+  btn.disabled=true; var paths=[], done=0;
+  function st(){ btn.textContent= files.length? "Subiendo "+done+" de "+files.length+"…" : "Enviando…"; } st();
+  var chain=Promise.resolve();
+  files.forEach(function(x){ chain=chain.then(function(){ return AL.shrink(x.file).then(function(b){
+    var ext=(b.type==="application/pdf")?"pdf":(b.type==="image/png"?"png":(/heic|heif/.test(b.type)?"heic":"jpg"));
+    var p=id+"/"+x.tag+"-"+x.n+"."+ext; return AL.upload(p,b).then(function(r){ if(r.ok) paths.push(p); done++; st(); }); }).catch(function(){ done++; st(); }); }); });
+  chain.then(function(){
+    var ids=["asegurado_nombre","asegurado_dni","asegurado_telefono","asegurado_email","dominio","aseguradora_propia","fecha_siniestro","hora","lugar","relato","hubo_lesiones","intervino_policia","denuncia_hecha","tercero_dominio","tercero_nombre","tercero_aseguradora","tercero_poliza","tercero_telefono"];
+    var row={id:id,pas_codigo:P||null,fotos:paths,consentimiento:true,consentimiento_salud:!!document.getElementById("consentimiento_salud").checked,origen:ORIGEN}; ids.forEach(function(k){ row[k]=AL.val(k); });
+    if(row.dominio) row.dominio=row.dominio.toUpperCase(); if(row.tercero_dominio) row.tercero_dominio=row.tercero_dominio.toUpperCase();
+    return AL.post("siniestros_web",row).then(function(r){ if(!r.ok) throw 0;
+      verCaso(row); limpiar(); w.hidden=true; document.getElementById("ok").hidden=false; window.scrollTo(0,0);
+      if(paths.length<files.length) document.querySelector("#ok p").textContent+=" Algunas fotos no se pudieron subir: te las pedimos por WhatsApp.";
+    });
+  }).catch(function(){ btn.disabled=false; btn.textContent="Enviar"; AL.say(msg,"No pudimos enviarlo. Probá de nuevo en un momento o escribinos por WhatsApp al 261 633-4179.",false); });
+});
+function waNum(t){ var d=(t||"").replace(/\D/g,""); if(!d) return ""; if(d.indexOf("54")===0) return d; d=d.replace(/^0/,""); return "549"+d; }
+function verCaso(row){
+  AL.rpc("resultado_caso",{p_id:row.id}).then(function(a){
+    if(a&&a[0]){ row.numero=a[0].numero; var url=location.origin+"/seguimiento?c="+a[0].codigo;
+      document.getElementById("c-num").textContent=a[0].numero; document.getElementById("c-ver").href=url;
+      document.getElementById("c-copy").addEventListener("click",function(){ (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).catch(function(){}); this.textContent="Copiado"; });
+      try{ var l=JSON.parse(localStorage.getItem("al_mis_casos")||"[]"); l.unshift({n:a[0].numero,u:url}); localStorage.setItem("al_mis_casos",JSON.stringify(l.slice(0,10))); }catch(x){}
+      if(PAS&&waNum(PAS.telefono)){ var c=document.getElementById("c-pas");
+        c.href="https://wa.me/"+waNum(PAS.telefono)+"?text="+encodeURIComponent("Hola "+PAS.nombre.split(" ")[0]+", soy "+row.asegurado_nombre+". Cargué la denuncia de mi siniestro en AuxilioLegal: caso "+a[0].numero+". Seguimiento: "+url);
+        c.insertAdjacentHTML("afterbegin",document.querySelector("#ok > .btn-wa svg").outerHTML); c.hidden=false; }
+      document.getElementById("caso").hidden=false; }
+  }).catch(function(){}).then(function(){ alerta72(row); });
+}
+function alerta72(row){
+  if(row.denuncia_hecha || !row.fecha_siniestro) return;
+  /* Art. 46 Ley 17.418: 3 días; cómputo art. 6 CCyC: vence a las 24 h del tercer día. Hora fija de Mendoza (UTC-3). */
+  var fin=new Date(row.fecha_siniestro+"T12:00:00Z"); fin.setUTCDate(fin.getUTCDate()+3); var finIso=fin.toISOString().slice(0,10);
+  var vence=new Date(finIso+"T23:59:00-03:00"), ahora=new Date();
+  var DIAS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"], p=finIso.split("-");
+  var txtV=DIAS[fin.getUTCDay()]+" "+p[2]+"/"+p[1]+" a las 23:59";
+  var box=document.getElementById("alerta"), btn=document.getElementById("al-btn"), ok=document.getElementById("al-ok");
+  var hoy=AL.hoyIso(), quedan=Math.round((new Date(finIso+"T12:00:00Z")-new Date(hoy+"T12:00:00Z"))/864e5);
+  if(vence>ahora){
+    document.getElementById("al-vence").textContent="Vence el "+txtV+(quedan===0?" (es hoy)":" (quedan "+quedan+(quedan===1?" día":" días")+" además de hoy)");
+  } else {
+    document.getElementById("al-txt").textContent="El plazo de 3 días para denunciar el siniestro en tu compañía ya pasó. Si todavía no la hiciste, hacela hoy mismo y contanos: la demora se puede justificar si no fue tu culpa.";
+    document.getElementById("al-vence").textContent="Venció el "+txtV; btn.textContent="Avisar al abogado";
+  }
+  box.hidden=false;
+  btn.addEventListener("click",function(){
+    btn.disabled=true;
+    AL.post("alertas_denuncia",{siniestro_id:row.id,vence:vence.toISOString()}).catch(function(){});
+    if(vence>ahora){
+      var z=function(d){return d.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");};
+      var ini=new Date(finIso+"T09:00:00-03:00"); if(ini<ahora) ini=new Date(ahora.getTime()+5*6e4);
+      var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//AuxilioLegal//ES","BEGIN:VEVENT","UID:"+row.id+"@auxiliolegal.com.ar","DTSTAMP:"+z(ahora),
+        "DTSTART:"+z(ini),"DTEND:"+z(new Date(ini.getTime()+36e5)),"SUMMARY:Último día para denunciar el siniestro en tu seguro (vence 23:59)",
+        "DESCRIPTION:Tenés 3 días desde el siniestro para denunciarlo en tu compañía de seguros. Si ya la hiciste no tenés que hacer nada. AuxilioLegal 261 633-4179.",
+        "BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:Mañana es el último día para denunciar el siniestro en tu seguro","END:VALARM",
+        "BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:Hoy es el último día para denunciar el siniestro en tu seguro","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+      var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"})); a.download="Recordatorio denuncia siniestro.ics"; document.body.appendChild(a); a.click(); a.remove();
+    }
+    var msg="Hola, soy "+row.asegurado_nombre+(row.numero?" (caso "+row.numero+")":"")+". Cargué mi siniestro del "+row.fecha_siniestro.split("-").reverse().join("/")+" y activé la alerta: la denuncia en mi seguro vence el "+txtV+".";
+    window.open("https://wa.me/5492616334179?text="+encodeURIComponent(msg),"_blank");
+    ok.textContent= vence>ahora ? "Alerta activada: agregamos el recordatorio a tu calendario y le avisamos al abogado." : "Listo, le avisamos al abogado."; ok.hidden=false;
+    btn.textContent="Alerta activada";
+  });
+}
+</script>
+</body>
+</html>

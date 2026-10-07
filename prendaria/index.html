@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nota de liberación prendaria — AuxilioLegal</title>
+<meta name="description" content="Generá gratis la nota de libre elección de aseguradora para créditos prendarios (Res. SSN 24/2023 y 407/2023), en PDF al instante.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://auxiliolegal.com.ar/prendaria">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/al.css">
+</head>
+<body class="app">
+<header><div class="wrap nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="AuxilioLegal"></a>
+<a class="btn btn-ghost" href="/">Inicio</a></div></header>
+<main><section class="tool"><div class="wrap doc">
+<h1>Nota de liberación prendaria.</h1>
+<p class="sub">Tu cliente elige su aseguradora y el acreedor tiene que aceptarla. Completá tres pasos y descargá la nota en PDF al instante.</p>
+<form id="w" class="contact-box wiz" novalidate>
+  <div class="wiz-top"><span class="step-lab"></span><div class="bar-track"><div class="bar-fill"></div></div></div>
+  <fieldset class="step" data-t="Productor y acreedor">
+    <div class="seg" role="radiogroup" aria-label="Situación del crédito">
+      <label><input type="radio" name="tipo" id="t_nuevo" value="nuevo" checked><span><b>Crédito nuevo</b>Elegir aseguradora desde el inicio</span></label>
+      <label><input type="radio" name="tipo" id="t_vigente" value="vigente"><span><b>Seguro ya vigente</b>Cambiar el seguro que puso el acreedor</span></label>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="pas_nombre">Tu nombre y apellido *</label><input id="pas_nombre" type="text" required placeholder="" autocomplete="name"></div>
+      <div class="field"><label for="pas_matricula">Matrícula SSN</label><input id="pas_matricula" type="text" placeholder="" inputmode="numeric"></div>
+      <div class="field"><label for="pas_email">Tu correo *</label><input id="pas_email" type="email" required placeholder="" autocomplete="email"></div>
+      <div class="field"><label for="pas_telefono">Tu WhatsApp</label><input id="pas_telefono" type="tel" placeholder="" ></div>
+      <div class="field"><label for="acreedor">Acreedor prendario *</label><input id="acreedor" type="text" required placeholder="Banco, financiera o plan de ahorro" ></div>
+      <div class="field"><label for="nro_credito">N° de crédito o de grupo y orden</label><input id="nro_credito" type="text" placeholder="" ></div>
+    </div>
+  </fieldset>
+  <fieldset class="step" data-t="Cliente y vehículo">
+    <div class="row2">
+      <div class="field"><label for="cliente_nombre">Nombre y apellido del titular *</label><input id="cliente_nombre" type="text" required placeholder="" ></div>
+      <div class="field"><label for="cliente_dni">DNI</label><input id="cliente_dni" type="text" placeholder="" inputmode="numeric" data-digits="7" data-maxd="8" data-err="Revisá el DNI: son 7 u 8 números." data-nodraft></div>
+      <div class="field"><label for="cliente_domicilio">Domicilio</label><input id="cliente_domicilio" type="text" placeholder="" data-nodraft></div>
+      <div class="field"><label for="cliente_telefono">Teléfono</label><input id="cliente_telefono" type="tel" placeholder="" data-nodraft></div>
+      <div class="field"><label for="marca">Marca</label><input id="marca" type="text" placeholder="" ></div>
+      <div class="field"><label for="modelo">Modelo</label><input id="modelo" type="text" placeholder="" ></div>
+      <div class="field"><label for="anio">Año</label><input id="anio" type="text" placeholder="" inputmode="numeric"></div>
+      <div class="field"><label for="dominio">Dominio *</label><input id="dominio" type="text" required placeholder="" style="text-transform:uppercase"></div>
+    </div>
+  </fieldset>
+  <fieldset class="step" data-t="Póliza nueva" data-check="chkVig">
+    <div class="row2">
+      <div class="field"><label for="aseguradora_nueva">Compañía aseguradora *</label><input id="aseguradora_nueva" type="text" required placeholder="" ></div>
+      <div class="field"><label for="poliza_nro">N° de póliza</label><input id="poliza_nro" type="text" placeholder="" ></div>
+      <div class="field"><label for="cobertura">Cobertura</label><input id="cobertura" type="text" placeholder="Ej.: todo riesgo con franquicia" ></div>
+      <div class="field"><label for="suma_asegurada">Suma asegurada</label><input id="suma_asegurada" type="text" placeholder="$" ></div>
+      <div class="field"><label for="vigencia_desde">Vigencia desde</label><input id="vigencia_desde" type="date" placeholder="" ></div>
+      <div class="field"><label for="vigencia_hasta">Vigencia hasta</label><input id="vigencia_hasta" type="date" placeholder="" ></div>
+    </div>
+    <label class="chk"><input id="acepta" type="checkbox" required><span>Acepto los <a href="#terminos">términos de uso</a>. *</span></label>
+  </fieldset>
+  <div class="wiz-nav"><button type="button" class="btn btn-ghost" data-prev>Atrás</button><button type="submit" class="btn btn-primary" data-next data-last="Generar nota en PDF">Siguiente</button></div>
+  <p class="msg" role="status" aria-live="polite"></p>
+</form>
+<div id="ok" class="contact-box done" hidden>
+  <h2>Nota descargada.</h2>
+  <p>Hacela firmar por el titular y presentala al acreedor junto con la póliza y el certificado de cobertura con el endoso a su favor.</p>
+  <div class="actions"><button class="btn btn-primary" id="otra" type="button">Descargar de nuevo</button><a class="btn btn-ghost" href="/prendaria">Hacer otra nota</a></div>
+  <div class="cross"><b>¿Tu cliente tuvo un siniestro?</b> <a href="/enlace">Generá tu enlace</a> y que cargue todo desde el celular.</div>
+</div>
+<div id="terminos" class="terms"><h2>Términos de uso</h2>
+<p>Herramienta gratuita para cualquier Productor Asesor de Seguros, sin obligación de derivar casos ni contraprestación alguna.</p>
+<p>La nota es una plantilla orientativa basada en la Resolución SSN N° 24/2023 y su modificatoria N° 407/2023. No constituye asesoramiento ni patrocinio letrado: verificá la cobertura mínima que exige el acreedor y los requisitos del endoso antes de presentarla.</p>
+<p>Los datos del titular (nombre, DNI, domicilio y teléfono) se usan solo para armar el PDF en tu dispositivo y no se guardan. Guardamos tus datos de productor y los del crédito para estadísticas, conforme la Ley 25.326 y nuestra <a href="/privacidad">política de privacidad</a>. Quien carga los datos declara contar con autorización del titular.</p></div>
+</div></section></main>
+<footer><div class="wrap"><p style="font-size:.84rem;color:var(--steel)">© 2026 auxiliolegal.com.ar — <a href="/privacidad">Privacidad</a></p></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="/assets/app.js"></script>
+<script>
+var w=document.getElementById("w"), last=null;
+var limpiar=AL.draft(w,"al_prendaria");
+window.chkVig=function(){ var d=document.getElementById("vigencia_desde").value, h=document.getElementById("vigencia_hasta").value; return d&&h&&h<=d ? "La vigencia \"hasta\" tiene que ser posterior a \"desde\"." : ""; };
+function pdf(d){
+  var J=new window.jspdf.jsPDF({unit:"mm",format:"a4"}), x=25, W=160, y=26;
+  function t(s,o){ o=o||{}; J.setFont("helvetica",o.b?"bold":"normal"); J.setFontSize(o.s||10.8); J.setTextColor(o.c||20);
+    J.splitTextToSize(s,W).forEach(function(l){ if(y>272){J.addPage();y=25;} J.text(l,o.r?x+W:x,y,{align:o.r?"right":"left"}); y+=o.lh||5.4; }); y+=o.g||0; }
+  var nuevo=d.tipo==="nuevo", veh=[d.marca,d.modelo,d.anio].filter(Boolean).join(" ");
+  t("Mendoza, "+AL.hoy(),{r:true,g:8});
+  t("Señores",{}); t(d.acreedor,{b:true}); t("Presente",{g:6});
+  t("Ref.: "+(nuevo?"Libre elección de compañía aseguradora":"Sustitución del seguro del bien prendado")+(d.nro_credito?" — Crédito / Grupo y orden N° "+d.nro_credito:"")+" — Dominio "+d.dominio,{b:true,g:6});
+  t(d.cliente_nombre+(d.cliente_dni?", DNI "+d.cliente_dni:"")+(d.cliente_domicilio?", con domicilio en "+d.cliente_domicilio:"")+
+    ", en su carácter de titular del crédito prendario"+(d.nro_credito?" N° "+d.nro_credito:"")+" otorgado por esa entidad sobre el vehículo "+(veh?veh+", ":"")+"dominio "+d.dominio+
+    ", se dirige a ustedes a fin de informar que ha contratado el seguro del bien prendado en la compañía "+d.aseguradora_nueva+
+    (d.poliza_nro?", póliza N° "+d.poliza_nro:"")+(d.cobertura?", cobertura "+d.cobertura:"")+
+    (d.vigencia_desde?", con vigencia desde el "+AL.larga(d.vigencia_desde)+(d.vigencia_hasta?" hasta el "+AL.larga(d.vigencia_hasta):""):"")+
+    (d.suma_asegurada?", suma asegurada "+d.suma_asegurada:"")+", con la intervención del Productor Asesor de Seguros "+d.pas_nombre+(d.pas_matricula?" (matrícula SSN N° "+d.pas_matricula+")":"")+".",{g:4});
+  t("La póliza se emite con endoso a favor de esa entidad en su carácter de acreedor prendario y respeta la cobertura mínima exigida para el bien.",{g:4});
+  if(nuevo){
+    t("La presente se formula en ejercicio del derecho de libre elección de la compañía aseguradora y del canal de contratación, conforme la Resolución SSN N° 24/2023 y su modificatoria Resolución SSN N° 407/2023.",{g:4});
+    t("En consecuencia, solicita que se tome razón de la póliza indicada, se registre el endoso a favor de esa entidad y no se incluya en las cuotas del crédito el premio de ningún otro seguro sobre el mismo bien.",{g:4});
+  } else {
+    t("En consecuencia, solicita que se tome razón de la nueva póliza, se registre el endoso a favor de esa entidad, se deje sin efecto el seguro contratado por su intermedio y cese el débito del premio correspondiente a partir del inicio de vigencia de la nueva cobertura, en los términos de la Resolución SSN N° 24/2023 y su modificatoria Resolución SSN N° 407/2023.",{g:4});
+  }
+  t("Se acompaña copia de la póliza y del certificado de cobertura. Se solicita confirmación por escrito"+(d.cliente_telefono?", al teléfono "+d.cliente_telefono+" o":"")+" al correo del productor, "+d.pas_email+".",{g:4});
+  t("Saludo a ustedes atentamente.",{g:24});
+  if(y>250){J.addPage();y=40;}
+  J.setDrawColor(60); J.setLineWidth(.3); J.line(x,y,x+65,y); J.line(x+95,y,x+160,y); y+=5;
+  J.setFontSize(9.5); J.text(d.cliente_nombre,x,y); J.text(d.pas_nombre,x+95,y); y+=4.5;
+  J.text("Titular"+(d.cliente_dni?" · DNI "+d.cliente_dni:""),x,y); J.text("Productor Asesor de Seguros"+(d.pas_matricula?" · Mat. "+d.pas_matricula:""),x+95,y);
+  J.setFontSize(7.5); J.setTextColor(130); J.text("Nota generada con la herramienta gratuita de AuxilioLegal (auxiliolegal.com.ar). Plantilla orientativa: no constituye patrocinio letrado.",x,289);
+  J.save("Liberacion prendaria - "+d.dominio+".pdf");
+}
+document.getElementById("otra").addEventListener("click",function(){ if(last) pdf(last); });
+AL.wizard(w,function(msg,btn){
+  if(!window.jspdf) return AL.say(msg,"No se pudo cargar el generador. Recargá la página.",false);
+  var ids=["pas_nombre","pas_matricula","pas_email","pas_telefono","acreedor","nro_credito","cliente_nombre","cliente_dni","cliente_domicilio","cliente_telefono","marca","modelo","anio","dominio","aseguradora_nueva","cobertura","poliza_nro","vigencia_desde","vigencia_hasta","suma_asegurada"];
+  var d={tipo:document.getElementById("t_vigente").checked?"vigente":"nuevo"}; ids.forEach(function(k){ d[k]=AL.val(k); });
+  d.dominio=d.dominio.toUpperCase(); last=d; btn.disabled=true;
+  var row=Object.assign({acepta_terminos:true},d); delete row.cliente_dni; delete row.cliente_domicilio; delete row.cliente_telefono; row.cliente_nombre=null;
+  AL.post("notas_prendarias",row).catch(function(){}).then(function(){
+    pdf(d); limpiar(); w.hidden=true; document.getElementById("ok").hidden=false; window.scrollTo(0,0); btn.disabled=false; });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "framework": null,
+  "buildCommand": "",
+  "installCommand": "",
+  "outputDirectory": ".",
+  "cleanUrls": true,
+  "crons": [{ "path": "/api/keepalive", "schedule": "17 11 * * *" }],
+  "redirects": [
+    { "source": "/:path*", "has": [{ "type": "host", "value": "www.auxiliolegal.com.ar" }], "destination": "https://auxiliolegal.com.ar/:path*", "permanent": true },
+    { "source": "/siniestro", "destination": "/choque", "permanent": false },
+    { "source": "/chocaste", "destination": "/choque", "permanent": false }
+  ],
+  "headers": [
+    { "source": "/(.*)", "headers": [
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+      { "key": "X-Frame-Options", "value": "DENY" },
+      { "key": "Permissions-Policy", "value": "camera=(self), microphone=(), geolocation=(), payment=()" },
+      { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://vercel.live; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://hfwqpjmbqsjtdyeajhqv.supabase.co https://vercel.live wss://ws-us3.pusher.com; frame-src https://vercel.live; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'" }
+    ]},
+    { "source": "/seguimiento", "headers": [{ "key": "Referrer-Policy", "value": "no-referrer" }] },
+    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }] }
+  ]
+}

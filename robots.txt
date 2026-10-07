@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /s
+Disallow: /seguimiento
+Disallow: /api/
+
+Sitemap: https://auxiliolegal.com.ar/sitemap.xml

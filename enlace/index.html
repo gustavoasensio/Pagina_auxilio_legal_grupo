@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enlace para tus clientes — AuxilioLegal</title>
+<meta name="description" content="Generá tu enlace gratuito para que tus asegurados carguen su siniestro con fotos desde el celular.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://auxiliolegal.com.ar/enlace">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/al.css">
+<style>
+[hidden]{display:none!important}
+.panel{margin-top:1.4rem}
+.panel h2{font-size:1.3rem;margin:0 0 .8rem}
+.casos{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.casos li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;align-items:center}
+.casos b{color:var(--ink)} .casos .n{font-weight:750;color:var(--navy);font-variation-settings:"wdth" 85}
+.casos small{grid-column:1;color:var(--muted);font-size:.85rem}
+.casos a{grid-row:1/span 3;grid-column:2;font-weight:650;font-size:.9rem}
+.pend{display:inline-block;background:#fff8eb;color:#8a3b00;border-radius:6px;padding:0 .4rem;font-size:.78rem;margin-left:.3rem}
+.vacio{background:#fff;border:1px dashed #c7ccda;border-radius:12px;padding:16px;color:var(--muted);font-size:.93rem}
+.llave{font-size:.86rem;color:var(--muted);margin-top:1rem}
+</style>
+</head>
+<body class="app">
+<header><div class="wrap nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="AuxilioLegal"></a>
+<a class="btn btn-ghost" href="/">Inicio</a></div></header>
+<main><section class="tool"><div class="wrap doc">
+<h1>Tu enlace para clientes.</h1>
+<p class="sub">Completá tus datos una sola vez. Te damos un enlace con tu nombre para mandar a cada asegurado que tenga un siniestro.</p>
+<form id="f" class="contact-box" novalidate>
+  <div class="row2">
+    <div class="field"><label for="nombre">Nombre y apellido *</label><input id="nombre" type="text" required placeholder="" autocomplete="name"></div>
+    <div class="field"><label for="broker">Nombre comercial o broker</label><input id="broker" type="text" placeholder="Opcional" ></div>
+    <div class="field"><label for="email">Correo *</label><input id="email" type="email" required placeholder="" autocomplete="email"></div>
+    <div class="field"><label for="telefono">WhatsApp</label><input id="telefono" type="tel" placeholder="" autocomplete="tel"></div>
+    <div class="field"><label for="matricula">Matrícula SSN</label><input id="matricula" type="text" placeholder="" inputmode="numeric"></div>
+  </div>
+  <label class="chk"><input id="acepta" type="checkbox"><span>Acepto los <a href="#terminos">términos de uso</a>.</span></label>
+  <button class="btn btn-primary full" id="go" type="submit">Crear mi enlace</button>
+  <p class="msg" id="msg" role="status" aria-live="polite"></p>
+</form>
+<div id="ok" class="contact-box done" hidden>
+  <h2>Listo, este es tu enlace.</h2>
+  <div class="linkbox"><input id="url" readonly><button class="btn btn-primary" id="copiar" type="button">Copiar</button></div>
+  <div class="actions"><a class="btn btn-wa" id="wa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm5.2 13.6c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.6.8 2 .9 2.1.1.1.1.3 0 .5-.1.2-.2.3-.3.5l-.5.5c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.9.9-1.2.2-.3.4-.2.7-.1.3.1 1.7.8 2 1 .3.1.5.2.6.3.1.2.1.7-.1 1.3z"/></svg>Enviar por WhatsApp</a><a class="btn btn-ghost" id="ver" target="_blank" rel="noopener">Ver cómo lo ve tu cliente</a></div>
+  <p class="fine">Guardalo: es el mismo para todos tus clientes. Cada vez que alguien lo complete, el caso llega a nosotros con tu nombre.</p>
+</div>
+<div class="panel" id="panel" hidden>
+  <h2>Mis casos</h2>
+  <ul class="casos" id="casos"></ul>
+  <p class="llave">Para ver tus casos desde otro dispositivo, guardá tu <a id="llave" href="#">acceso privado</a>. No lo compartas: es tu llave al panel.</p>
+</div>
+<div id="terminos" class="terms"><h2>Términos de uso</h2>
+<p>El enlace es gratuito y está disponible para cualquier Productor Asesor de Seguros, sin obligación de derivar casos ni contraprestación alguna.</p>
+<p>Los datos que carguen tus clientes se tratan conforme la Ley 25.326 y nuestra <a href="/privacidad">política de privacidad</a>; cada cliente presta su propio consentimiento al enviarlos.</p></div>
+</div></section></main>
+<footer><div class="wrap"><p style="font-size:.84rem;color:var(--steel)">© 2026 auxiliolegal.com.ar — <a href="/privacidad">Privacidad</a></p></div></footer>
+<script src="/assets/app.js"></script>
+<script>
+var f=document.getElementById("f"), go=document.getElementById("go"), m=document.getElementById("msg");
+function panel(c,k){ if(!k) return; var ul=document.getElementById("casos"), acc=location.origin+"/enlace?k="+c+"."+k;
+  document.getElementById("llave").href=acc; document.getElementById("llave").onclick=function(ev){ ev.preventDefault(); (navigator.clipboard?navigator.clipboard.writeText(acc):Promise.reject()).catch(function(){}); this.textContent="acceso privado (copiado)"; };
+  AL.rpc("casos_pas",{p_codigo:c,p_secreto:k}).then(function(a){ if(!Array.isArray(a)||!a.length) return;
+    var cs=a.filter(function(x){return x.numero;}), ET=["","Relevamiento","Reclamo extrajudicial","Mediación","Acuerdo y cobro","Litigio","Rendición"];
+    ul.innerHTML=""; if(!cs.length){ ul.outerHTML='<p class="vacio">Todavía no entraron casos por tu enlace. Cuando un cliente lo complete, aparece acá con su número.</p>'; }
+    cs.forEach(function(x){ var li=document.createElement("li"), d=new Date(x.creado_en);
+      li.innerHTML='<span><span class="n"></span> · <b></b></span><small></small><a target="_blank" rel="noopener">Ver</a>';
+      li.querySelector(".n").textContent=x.numero; li.querySelector("b").textContent=x.cliente;
+      li.querySelector("small").textContent="Etapa "+(x.etapa||1)+": "+ET[x.etapa||1]+" · cargado el "+d.toLocaleDateString("es-AR");
+      if(!x.denuncia_hecha){ var s=document.createElement("span"); s.className="pend"; s.textContent="denuncia al seguro pendiente"; li.querySelector("small").appendChild(s); }
+      li.querySelector("a").href="/seguimiento?c="+x.codigo; ul.appendChild(li); });
+    document.getElementById("panel").hidden=false; }).catch(function(){}); }
+function mostrar(c){ var u=location.origin+"/s?p="+c; document.getElementById("url").value=u;
+  document.getElementById("wa").href="https://wa.me/?text="+encodeURIComponent("Para iniciar el reclamo de tu siniestro, completá tus datos y subí las fotos acá: "+u);
+  document.getElementById("ver").href=u; f.hidden=true; document.getElementById("ok").hidden=false; }
+var K=new URLSearchParams(location.search).get("k")||"";
+if(/^[a-z0-9]{10,24}\.[a-z0-9]{20,40}$/.test(K)){ try{ localStorage.setItem("al_pas_codigo",K.split(".")[0]); localStorage.setItem("al_pas_secreto",K.split(".")[1]); }catch(x){} history.replaceState(null,"","/enlace"); }
+try{ var prev=localStorage.getItem("al_pas_codigo"); if(prev){ mostrar(prev); panel(prev,localStorage.getItem("al_pas_secreto")); } }catch(x){}
+document.getElementById("copiar").addEventListener("click",function(){ var i=document.getElementById("url"); i.select();
+  (navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(function(){document.execCommand("copy");}); this.textContent="Copiado"; });
+f.addEventListener("submit",function(e){ e.preventDefault();
+  if(!AL.val("nombre")||!AL.val("email")) return AL.say(m,"Completá nombre y correo.",false);
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(AL.val("email"))) return AL.say(m,"Revisá el correo.",false);
+  if(!AL.val("acepta")) return AL.say(m,"Necesitamos que aceptes los términos.",false);
+  go.disabled=true; go.textContent="Creando...";
+  var c=AL.code(10), k=AL.code(24);
+  AL.post("pas_links",{codigo:c,secreto:k,nombre:AL.val("nombre"),broker:AL.val("broker"),email:AL.val("email"),telefono:AL.val("telefono"),matricula:AL.val("matricula"),acepta_terminos:true})
+  .then(function(r){ if(!r.ok) throw 0; try{localStorage.setItem("al_pas_codigo",c);localStorage.setItem("al_pas_secreto",k);}catch(x){} mostrar(c); panel(c,k); })
+  .catch(function(){ AL.say(m,"No pudimos crear el enlace. Probá de nuevo o escribinos por WhatsApp.",false); go.disabled=false; go.textContent="Crear mi enlace"; });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nota de reclamo para productores — AuxilioLegal</title>
+<link rel="canonical" href="https://auxiliolegal.com.ar/nota">
+<meta name="description" content="Herramienta gratuita para Productores Asesores de Seguros: cargá el siniestro y descargá la nota de reclamo lista para presentar.">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/al.css">
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="AuxilioLegal"></a>
+<a class="btn btn-ghost" href="/#productores">Volver</a></div></header>
+<main>
+<section class="tool"><div class="wrap doc">
+<h1>Nota de reclamo para tu asegurado.</h1>
+<p class="sub">Cargá los datos del siniestro y descargá la nota lista para presentar a la compañía. Gratis para cualquier productor, derive casos o no.</p>
+
+<form id="nota" class="contact-box" novalidate>
+  <fieldset><legend>Productor</legend>
+    <div class="row2">
+      <div class="field"><label for="pas_nombre">Nombre y apellido *</label><input id="pas_nombre" required autocomplete="name"></div>
+      <div class="field"><label for="pas_matricula">Matrícula SSN</label><input id="pas_matricula" inputmode="numeric"></div>
+      <div class="field"><label for="pas_email">Correo *</label><input id="pas_email" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="pas_telefono">Teléfono</label><input id="pas_telefono" type="tel" autocomplete="tel"></div>
+    </div>
+  </fieldset>
+  <fieldset><legend>Asegurado que reclama</legend>
+    <div class="row2">
+      <div class="field"><label for="asegurado_nombre">Nombre y apellido *</label><input id="asegurado_nombre" required></div>
+      <div class="field"><label for="asegurado_dni">DNI</label><input id="asegurado_dni" inputmode="numeric"></div>
+      <div class="field"><label for="asegurado_telefono">Teléfono</label><input id="asegurado_telefono" type="tel"></div>
+      <div class="field"><label for="dominio_propio">Dominio de su vehículo</label><input id="dominio_propio" style="text-transform:uppercase"></div>
+    </div>
+  </fieldset>
+  <fieldset><legend>Siniestro</legend>
+    <div class="row2">
+      <div class="field"><label for="fecha_siniestro">Fecha *</label><input id="fecha_siniestro" type="date" required></div>
+      <div class="field"><label for="lugar">Lugar</label><input id="lugar" placeholder="Calle y altura o intersección, localidad"></div>
+    </div>
+    <div class="field"><label for="relato">Cómo ocurrió</label><textarea id="relato" placeholder="Breve relato del hecho."></textarea></div>
+    <div class="field"><label for="danos">Daños</label><textarea id="danos" placeholder="Daños materiales del vehículo y otros perjuicios."></textarea></div>
+    <label class="chk"><input id="hubo_lesiones" type="checkbox"><span>Hubo personas lesionadas</span></label>
+  </fieldset>
+  <fieldset><legend>Vehículo y compañía del tercero</legend>
+    <div class="row2">
+      <div class="field"><label for="aseguradora_destino">Compañía a la que se presenta *</label><input id="aseguradora_destino" required></div>
+      <div class="field"><label for="poliza_tercero">Póliza del tercero</label><input id="poliza_tercero"></div>
+      <div class="field"><label for="dominio_tercero">Dominio del tercero</label><input id="dominio_tercero" style="text-transform:uppercase"></div>
+      <div class="field"><label for="conductor_tercero">Conductor del tercero</label><input id="conductor_tercero"></div>
+    </div>
+  </fieldset>
+  <label class="chk"><input id="acepta" type="checkbox"><span>Declaro contar con autorización del asegurado para cargar sus datos y acepto los <a href="#terminos">términos de uso</a>.</span></label>
+  <button class="btn btn-primary" id="go" type="submit">Generar nota en PDF</button>
+  <p id="msg" role="status" aria-live="polite" class="msg"></p>
+</form>
+
+<div id="listo" class="contact-box done" hidden>
+  <h2>Nota descargada.</h2>
+  <p>Hacela firmar por el asegurado y presentala con la documentación. Si la compañía no responde o la propuesta no alcanza, derivanos el caso y lo tomamos desde ahí.</p>
+  <div class="actions">
+    <button class="btn btn-primary" id="derivar" type="button">Derivar este caso a AuxilioLegal</button>
+    <button class="btn btn-ghost" id="otra" type="button">Descargar de nuevo</button>
+  </div>
+  <p id="msg2" role="status" aria-live="polite" class="msg"></p>
+</div>
+
+<div id="terminos" class="terms">
+  <h2>Términos de uso</h2>
+  <p>La herramienta es gratuita y está disponible para cualquier Productor Asesor de Seguros, sin obligación de derivar casos ni contraprestación alguna.</p>
+  <p>La nota es una plantilla orientativa que presenta el asegurado, con intervención de su productor. No constituye patrocinio ni asesoramiento letrado sobre el caso.</p>
+  <p>Los datos se usan para armar el PDF en tu dispositivo. Solo se guardan en la base de AuxilioLegal si tocás «Derivar este caso», conforme la Ley 25.326 y nuestra <a href="/privacidad">política de privacidad</a>. Quien los carga declara contar con autorización de su titular.</p>
+</div>
+</div></section>
+</main>
+<footer><div class="wrap"><p style="font-size:.84rem;color:var(--steel)">© 2026 auxiliolegal.com.ar — <a href="/">Inicio</a> · <a href="/privacidad">Privacidad</a></p></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+  var U="https://hfwqpjmbqsjtdyeajhqv.supabase.co/rest/v1/", K="sb_publishable_bVyhboFI2QwZqvKTOF9Quw_klcuXkdV";
+  var f=document.getElementById("nota"), go=document.getElementById("go"), last=null;
+  function v(id){ var e=document.getElementById(id); return e.type==="checkbox"?e.checked:e.value.trim(); }
+  function say(el,t,ok){ el.textContent=t; el.style.color= ok?"#1d7a4c":"#b3261e"; }
+  function post(tabla,obj){ return fetch(U+tabla,{method:"POST",headers:{"apikey":K,"Authorization":"Bearer "+K,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(obj)}); }
+  function fechaLarga(iso){ if(!iso) return "fecha a precisar"; var p=iso.split("-"); var m=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"]; return (+p[2])+" de "+m[+p[1]-1]+" de "+p[0]; }
+  function AL_hoy(){ return new Date(Date.now()-3*36e5).toISOString().slice(0,10); }
+  function hoy(){ var d=new Date(); return fechaLarga(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")); }
+
+  function pdf(d){
+    var J=new window.jspdf.jsPDF({unit:"mm",format:"a4"}), x=25, w=160, y=28;
+    function t(s,o){ o=o||{}; J.setFont("helvetica",o.b?"bold":"normal"); J.setFontSize(o.s||11);
+      var ls=J.splitTextToSize(s,w); ls.forEach(function(l){ if(y>270){J.addPage();y=25;} J.text(l,o.r?x+w:x,y,{align:o.r?"right":"left"}); y+=o.lh||5.6; }); y+=o.gap||0; }
+    t("Mendoza, "+hoy(),{r:true,gap:8});
+    t("Señores",{}); t(d.aseguradora_destino,{b:true}); t("Departamento de Siniestros",{}); t("Presente",{gap:6});
+    var ref="Ref.: Reclamo por siniestro vial del "+fechaLarga(d.fecha_siniestro)+(d.dominio_tercero?" — Vehículo dominio "+d.dominio_tercero.toUpperCase():"")+(d.poliza_tercero?" — Póliza N° "+d.poliza_tercero:"");
+    t(ref,{b:true,gap:6});
+    var p1=d.asegurado_nombre+(d.asegurado_dni?", DNI "+d.asegurado_dni:"")+(d.dominio_propio?", titular o conductor del vehículo dominio "+d.dominio_propio.toUpperCase():"")+
+      ", con la intervención de su Productor Asesor de Seguros "+d.pas_nombre+(d.pas_matricula?" (matrícula SSN "+d.pas_matricula+")":"")+
+      ", se presenta ante ustedes y formula reclamo por los daños sufridos en el siniestro ocurrido el "+fechaLarga(d.fecha_siniestro)+(d.lugar?", en "+d.lugar:"")+
+      ", en el que intervino el vehículo"+(d.dominio_tercero?" dominio "+d.dominio_tercero.toUpperCase():"")+(d.conductor_tercero?", conducido por "+d.conductor_tercero:"")+", asegurado en esa compañía.";
+    t(p1,{gap:4});
+    if(d.relato){ t("Relato del hecho",{b:true}); t(d.relato,{gap:4}); }
+    if(d.danos){ t("Daños",{b:true}); t(d.danos,{gap:4}); }
+    if(d.hubo_lesiones){ t("Como consecuencia del hecho resultaron personas lesionadas; los daños derivados serán acreditados oportunamente.",{gap:4}); }
+    t("Se acompaña la documentación de respaldo disponible y se solicita la apertura del reclamo, la asignación de número de siniestro y la coordinación de la inspección correspondiente, a fin de avanzar en la liquidación del daño.",{gap:4});
+    t("Se deja constancia de la reserva de ampliar el presente reclamo y de ejercer las acciones que pudieran corresponder.",{gap:4});
+    var c="Contacto: "+(d.asegurado_telefono?"asegurado, tel. "+d.asegurado_telefono+"; ":"")+"productor, "+d.pas_email+(d.pas_telefono?", tel. "+d.pas_telefono:"")+".";
+    t(c,{gap:4}); t("Saludamos a ustedes atentamente.",{gap:22});
+    if(y>250){J.addPage();y=40;}
+    J.setLineWidth(.3); J.line(x,y,x+65,y); J.line(x+95,y,x+160,y); y+=5;
+    J.setFontSize(9.5); J.text(d.asegurado_nombre,x,y); J.text(d.pas_nombre,x+95,y); y+=4.5;
+    J.text("Asegurado",x,y); J.text("Productor Asesor de Seguros",x+95,y);
+    J.setFontSize(7.5); J.setTextColor(120); J.text("Nota generada con la herramienta gratuita de AuxilioLegal. Plantilla orientativa: no constituye patrocinio letrado.",x,288);
+    J.save("Nota de reclamo - "+d.asegurado_nombre.replace(/[^\wÁÉÍÓÚáéíóúÑñ ]/g,"")+".pdf");
+  }
+
+  f.addEventListener("submit",function(e){
+    e.preventDefault(); var m=document.getElementById("msg");
+    var ids=["pas_nombre","pas_matricula","pas_email","pas_telefono","asegurado_nombre","asegurado_dni","asegurado_telefono","dominio_propio","fecha_siniestro","lugar","relato","danos","hubo_lesiones","aseguradora_destino","poliza_tercero","dominio_tercero","conductor_tercero"];
+    var d={}; ids.forEach(function(i){ d[i]=v(i); });
+    if(!d.pas_nombre||!d.pas_email||!d.asegurado_nombre||!d.fecha_siniestro||!d.aseguradora_destino){ say(m,"Completá los campos marcados con asterisco.",false); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.pas_email)){ say(m,"Revisá el correo, parece incompleto.",false); return; }
+    if(d.fecha_siniestro>AL_hoy()){ say(m,"La fecha del siniestro no puede ser posterior a hoy.",false); return; }
+    if(!v("acepta")){ say(m,"Necesitamos que aceptes los términos de uso.",false); return; }
+    if(!window.jspdf){ say(m,"No se pudo cargar el generador. Recargá la página e intentá de nuevo.",false); return; }
+    go.disabled=true; go.textContent="Generando...";
+    var row={}; for(var k in d){ row[k]= d[k]===""?null:d[k]; } row.id=(crypto.randomUUID?crypto.randomUUID():null); if(!row.id) delete row.id; row.acepta_terminos=true;
+    last={d:d,id:row.id,row:row};
+    /* Los datos solo se guardan si el productor deriva el caso */
+    pdf(d); f.hidden=true; document.getElementById("listo").hidden=false;
+    document.getElementById("listo").scrollIntoView({behavior:"smooth",block:"start"});
+    go.disabled=false; go.textContent="Generar nota en PDF";
+  });
+  document.getElementById("otra").addEventListener("click",function(){ if(last) pdf(last.d); });
+  document.getElementById("derivar").addEventListener("click",function(){
+    var b=this, m=document.getElementById("msg2"); if(!last) return; b.disabled=true;
+    post("notas_pas",last.row).catch(function(){}).then(function(){ return post("consultas",{nombre:last.d.pas_nombre,email:last.d.pas_email,telefono:last.d.pas_telefono||null,tipo:"Derivación de PAS",
+      mensaje:"Derivación desde nota"+(last.id?" "+last.id:"")+". Asegurado: "+last.d.asegurado_nombre+". Compañía: "+last.d.aseguradora_destino+".",consentimiento:true,origen:"pas-nota"}); })
+    .then(function(r){ if(r.ok){ say(m,"Listo, recibimos la derivación. Te contactamos dentro de las 48 h hábiles.",true); b.textContent="Caso derivado"; } else { b.disabled=false; say(m,"No pudimos enviarla. Escribinos por WhatsApp al 261 633-4179.",false); } })
+    .catch(function(){ b.disabled=false; say(m,"No pudimos enviarla. Escribinos por WhatsApp al 261 633-4179.",false); });
+  });
+})();
+</script>
+</body>
+</html>
