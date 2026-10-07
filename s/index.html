@@ -97,8 +97,9 @@
   <p>Un abogado del equipo revisa tu caso y te contacta por WhatsApp dentro de las 48 horas hábiles.</p>
   <div class="caso" id="caso" hidden>
     <span>Tu número de caso</span><b id="c-num"></b>
-    <p>Guardá este enlace: con él seguís tu reclamo cuando quieras, igual que nosotros y tu productor.</p>
+    <p>Guardá este enlace: es personal y con él seguís tu reclamo cuando quieras. Mandátelo por WhatsApp para no perderlo.</p>
     <div class="actions"><a class="btn btn-road" id="c-ver" target="_blank" rel="noopener">Ver mi caso</a><button class="btn btn-ghost" id="c-copy" type="button">Copiar enlace</button></div>
+    <a class="btn btn-ghost" id="c-yo" target="_blank" rel="noopener" style="margin-top:.7rem;width:100%">Mandarme el enlace por WhatsApp</a>
     <a class="btn btn-wa" id="c-pas" target="_blank" rel="noopener" hidden>Avisarle a mi productor</a>
   </div>
   <div class="alerta" id="alerta" hidden>
@@ -152,6 +153,7 @@ function verCaso(row){
   AL.rpc("resultado_caso",{p_id:row.id}).then(function(a){
     if(a&&a[0]){ row.numero=a[0].numero; var url=location.origin+"/seguimiento?c="+a[0].codigo;
       document.getElementById("c-num").textContent=a[0].numero; document.getElementById("c-ver").href=url;
+      document.getElementById("c-yo").href="https://wa.me/?text="+encodeURIComponent("Mi reclamo en AuxilioLegal (caso "+a[0].numero+"): "+url);
       document.getElementById("c-copy").addEventListener("click",function(){ (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).catch(function(){}); this.textContent="Copiado"; });
       try{ var l=JSON.parse(localStorage.getItem("al_mis_casos")||"[]"); l.unshift({n:a[0].numero,u:url}); localStorage.setItem("al_mis_casos",JSON.stringify(l.slice(0,10))); }catch(x){}
       if(PAS&&waNum(PAS.telefono)){ var c=document.getElementById("c-pas");

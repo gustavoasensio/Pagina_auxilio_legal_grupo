@@ -7,11 +7,21 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
+<meta name="apple-mobile-web-app-title" content="Mi reclamo">
+<meta name="application-name" content="Mi reclamo">
+<meta name="theme-color" content="#141f45">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/al.css">
-<style>.numcaso{display:inline-block;background:var(--navy);color:var(--road);font-weight:750;border-radius:8px;padding:.25rem .7rem;margin-bottom:.8rem;font-size:.95rem;letter-spacing:.02em}</style>
+<style>.numcaso{display:inline-block;background:var(--navy);color:var(--road);font-weight:750;border-radius:8px;padding:.25rem .7rem;margin-bottom:.8rem;font-size:.95rem;letter-spacing:.02em}.guardar{background:#fff8e1;border:1.5px solid var(--road);border-radius:14px;padding:16px 18px;margin:1.6rem 0 0}
+.guardar h3{margin:0 0 .3rem;font-size:1.05rem}
+.guardar p{margin:0 0 .8rem;font-size:.93rem}
+.guardar .actions{margin-top:.2rem}
+.guardar ol{margin:.6rem 0 0;padding-left:1.2rem;font-size:.92rem}
+.guardar ol li{margin-bottom:.3rem}
+</style>
 </head>
 <body>
 <header><div class="wrap nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="AuxilioLegal"></a></div></header>
@@ -30,6 +40,16 @@
     </div>
     <div class="next"><h3>Próximo paso</h3><p id="prox"></p></div>
     <ol class="road track" id="ruta"></ol>
+    <div class="guardar" id="guardar">
+      <h3>Guardá este enlace</h3>
+      <p>Es personal: con él ves tu reclamo cuando quieras. Si lo perdés, pedínoslo por WhatsApp.</p>
+      <div class="actions">
+        <button class="btn btn-primary btn-s" type="button" id="g-inicio">Guardar en mi celular</button>
+        <a class="btn btn-wa btn-s" id="g-wa" target="_blank" rel="noopener">Mandármelo por WhatsApp</a>
+        <button class="btn btn-ghost btn-s" type="button" id="g-copiar">Copiar enlace</button>
+      </div>
+      <ol id="g-pasos" hidden></ol>
+    </div>
     <p class="fine">Esta página se actualiza cuando tu reclamo avanza. Si tenés una duda, escribinos.</p>
   </div>
 
@@ -57,6 +77,21 @@
   function f(iso){ if(!iso) return "—"; var p=iso.slice(0,10).split("-"); return p[2]+"/"+p[1]+"/"+p[0]; }
   function show(id){ document.getElementById("cargando").hidden=true; document.getElementById(id).hidden=false; }
   if(c.length<16){ show("nada"); return; }
+  var instalar=null; window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); instalar=e; });
+  function guardar(num){
+    var url=location.origin+"/seguimiento?c="+encodeURIComponent(c);
+    try{ var l=JSON.parse(localStorage.getItem("al_mis_casos")||"[]").filter(function(x){return x.u!==url;}); l.unshift({n:num,u:url}); localStorage.setItem("al_mis_casos",JSON.stringify(l.slice(0,10))); }catch(x){}
+    document.getElementById("g-wa").href="https://wa.me/?text="+encodeURIComponent("Mi reclamo en AuxilioLegal"+(num?" (caso "+num+")":"")+": "+url);
+    document.getElementById("g-copiar").addEventListener("click",function(){ var b=this;
+      (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){ b.textContent="Copiado"; }).catch(function(){ prompt("Copiá este enlace:",url); }); });
+    document.getElementById("g-inicio").addEventListener("click",function(){
+      if(instalar){ instalar.prompt(); return; }
+      var ios=/iphone|ipad|ipod/i.test(navigator.userAgent), ol=document.getElementById("g-pasos");
+      ol.innerHTML= ios
+        ? "<li>Tocá el botón <b>Compartir</b> (el cuadrado con la flecha hacia arriba) abajo en Safari.</li><li>Elegí <b>Agregar a inicio</b>.</li><li>Tocá <b>Agregar</b>: te queda el ícono «Mi reclamo» en la pantalla.</li>"
+        : "<li>Tocá el menú <b>⋮</b> arriba a la derecha del navegador.</li><li>Elegí <b>Agregar a la pantalla principal</b> (o «Instalar»).</li><li>Confirmá: te queda el ícono «Mi reclamo» en la pantalla.</li>";
+      ol.hidden=false; });
+  }
   fetch("https://hfwqpjmbqsjtdyeajhqv.supabase.co/rest/v1/rpc/ver_seguimiento",{method:"POST",
     headers:{"apikey":"sb_publishable_bVyhboFI2QwZqvKTOF9Quw_klcuXkdV","Content-Type":"application/json"},body:JSON.stringify({p_codigo:c})})
   .then(function(r){ if(!r.ok) throw new Error("http "+r.status); return r.json(); }).then(function(a){
@@ -74,7 +109,7 @@
       li.className= n<e?"ok":(n===e?"now":"");
       li.innerHTML='<span class="km">'+n+'</span><div><h3></h3><p></p></div>';
       li.querySelector("h3").textContent=x[0]; li.querySelector("p").textContent=x[1]; ol.appendChild(li); });
-    show("caso");
+    show("caso"); guardar(s.numero);
   }).catch(function(){ show("error"); });
 })();
 </script>

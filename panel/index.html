@@ -229,14 +229,20 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
       Promise.all(ps).then(function(){ c.estado=selEs.value; c.notas_internas=notas.value.trim()||null; if(s){ s.etapa=+selEt.value; s.proximo_paso=prox.value.trim(); s.ultimo_movimiento=hoy(); }
         say(msg,"Guardado. El cliente y el productor ya ven la etapa nueva.",true); guardarBtn.disabled=false; })
       .catch(function(e){ say(msg,"No se pudo guardar: "+e.message,false); guardarBtn.disabled=false; }); }});
-    var segUrl=s?location.origin+"/seguimiento?c="+s.codigo:null;
+    var segUrl=s?"https://auxiliolegal.com.ar/seguimiento?c="+s.codigo:null;
 
     box.replaceChildren(h("div",{class:"det"},[
       h("button",{class:"btn btn-ghost btn-s",type:"button",text:"← Volver a la lista",onclick:function(){ box.hidden=true; $("casos-lista").hidden=false; pintarLista(); }}),
       h("div",{style:"margin:16px 0 14px"},[ h("h2",{text:(c.numero||"Sin número")+" · "+c.asegurado_nombre}),
         h("p",{class:"mini",text:"Cargado el "+hora(c.creado_en)+" · origen "+(c.origen||"web")}),
         h("div",{class:"actions",style:"margin-top:.6rem"},[ waC?h("a",{class:"btn btn-wa btn-s",href:waC,target:"_blank",rel:"noopener",text:"WhatsApp al cliente"}):null,
-          segUrl?h("a",{class:"btn btn-ghost btn-s",href:segUrl,target:"_blank",rel:"noopener",text:"Ver su seguimiento"}):null ]) ]),
+          segUrl?h("a",{class:"btn btn-ghost btn-s",href:segUrl,target:"_blank",rel:"noopener",text:"Ver su seguimiento"}):null,
+          (segUrl&&waC)?h("button",{class:"btn btn-wa btn-s",type:"button",text:"Mandarle su seguimiento",onclick:function(){
+            var et=s?(+selEt.value):1, px=prox.value.trim();
+            var txt="Hola "+(c.asegurado_nombre||"").split(" ")[0]+", te escribimos de AuxilioLegal por tu caso "+(c.numero||"")+".\n"+
+              "Está en la etapa "+et+" de 6: "+ETAPAS[et-1].toLowerCase()+"."+(px?"\nPróximo paso: "+px:"")+
+              "\n\nSeguí tu reclamo cuando quieras en este enlace (guardalo, es personal):\n"+segUrl;
+            window.open(waC+"?text="+encodeURIComponent(txt),"_blank"); }}):null ]) ]),
       h("div",{class:"grid2"},[
         h("div",{class:"card"},[ h("h3",{text:"Avance del caso"}),
           h("div",{class:"field"},[h("label",{for:"d-estado",text:"Estado interno"}),selEs]),
