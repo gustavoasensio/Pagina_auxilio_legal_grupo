@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel del equipo — AuxilioLegal</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/al.css">
+<style>
+[hidden]{display:none!important}
+body{background:var(--fog)}
+main section{padding:0}
+.tabla-w{overflow-x:auto;border-radius:10px}
+.tabla{min-width:620px}
+.ph{background:var(--navy);color:#fff}
+.ph .wrap{display:flex;align-items:center;gap:14px;height:60px}
+.ph .logo{background:#fff;border-radius:8px;padding:5px 9px;margin-right:auto}
+.ph .logo img{height:24px}
+.ph .who{font-size:.86rem;color:#c9cee0}
+.ph button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:.35rem .75rem;font:inherit;font-size:.85rem;cursor:pointer}
+.tabs{display:flex;gap:4px;margin:18px 0 14px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:.6rem .9rem;font:inherit;font-weight:650;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--navy);border-bottom-color:var(--road)}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+.login{max-width:400px;margin:56px auto}
+.login h1{font-size:1.8rem;max-width:none;margin-bottom:1rem}
+.bar2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.bar2 input[type=search]{flex:1 1 220px}
+.bar2 select{width:auto}
+.bar2 label{display:flex;gap:.4rem;align-items:center;margin:0;font-weight:500;font-size:.88rem}
+.lista{display:grid;gap:8px}
+.fila{display:grid;grid-template-columns:120px 1fr auto;gap:4px 14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.fila:hover{border-color:var(--navy)}
+.fila .n{font-weight:750;color:var(--navy);font-variation-settings:"wdth" 85}
+.fila .q{color:var(--ink);font-weight:600}
+.fila small{grid-column:2/4;color:var(--muted);font-size:.84rem}
+@media(max-width:600px){.fila{grid-template-columns:1fr auto}.fila small{grid-column:1/3}.fila .q{grid-column:1/3;grid-row:2}}
+.tag{display:inline-block;border-radius:6px;padding:0 .45rem;font-size:.76rem;font-weight:650;margin-left:.3rem;white-space:nowrap}
+.t-pend{background:#fff1d6;color:#8a3b00}.t-les{background:#fde8e8;color:#9b1c1c}.t-est{background:#eef1f8;color:var(--navy)}
+.det h2{max-width:none;font-size:1.5rem;margin:0 0 .3rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+dl{display:grid;grid-template-columns:140px 1fr;gap:6px 12px;margin:0;font-size:.93rem}
+dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
+.det h3{font-size:1rem;margin:0 0 .7rem}
+.fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.fotos a{display:block;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--fog);aspect-ratio:1;position:relative}
+.fotos img{width:100%;height:100%;object-fit:cover}
+.fotos span{position:absolute;left:0;right:0;bottom:0;background:rgba(20,31,69,.75);color:#fff;font-size:.7rem;padding:2px 6px}
+.fotos .pdf{display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--navy)}
+.ok{color:#1d7a4c}.err{color:#b3261e}
+.mini{font-size:.84rem;color:var(--muted)}
+.tabla{width:100%;border-collapse:collapse;font-size:.92rem;background:#fff;border-radius:10px;overflow:hidden}
+.tabla th,.tabla td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tabla th{font-size:.8rem;color:var(--muted);font-weight:650}
+.clave{font-family:ui-monospace,Menlo,monospace;font-size:1.2rem;background:var(--fog);padding:.4rem .7rem;border-radius:8px;display:inline-block;letter-spacing:.04em}
+.btn-s{min-height:38px;padding:0 .9rem;font-size:.9rem}
+.vacio{background:#fff;border:1px dashed #c7ccda;border-radius:12px;padding:18px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="ph"><div class="wrap"><span class="logo"><img src="/assets/logo.png" alt="AuxilioLegal"></span><span class="who" id="who"></span><button id="salir" hidden>Salir</button></div></header>
+<main class="wrap" style="padding-bottom:60px">
+
+<section id="v-login" class="login card" hidden>
+  <h1>Panel del equipo</h1>
+  <form id="f-login" novalidate>
+    <div class="field"><label for="l-email">Correo</label><input id="l-email" type="email" autocomplete="username" required></div>
+    <div class="field"><label for="l-pass">Contraseña</label><input id="l-pass" type="password" autocomplete="current-password" required></div>
+    <button class="btn btn-primary full" type="submit">Entrar</button>
+    <p class="msg" id="l-msg" role="status"></p>
+  </form>
+</section>
+
+<section id="v-clave" class="login card" hidden>
+  <h1>Elegí tu contraseña</h1>
+  <p class="mini">Entraste con una contraseña temporal. Elegí una propia de al menos 10 caracteres.</p>
+  <form id="f-clave" novalidate>
+    <div class="field"><label for="c-1">Nueva contraseña</label><input id="c-1" type="password" autocomplete="new-password" minlength="10" required></div>
+    <div class="field"><label for="c-2">Repetila</label><input id="c-2" type="password" autocomplete="new-password" required></div>
+    <button class="btn btn-primary full" type="submit">Guardar contraseña</button>
+    <p class="msg" id="c-msg" role="status"></p>
+  </form>
+</section>
+
+<section id="v-app" hidden>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="casos" aria-selected="true">Casos</button>
+    <button role="tab" data-tab="consultas" aria-selected="false">Consultas</button>
+    <button role="tab" data-tab="equipo" aria-selected="false" id="tab-equipo" hidden>Equipo</button>
+  </div>
+
+  <div id="t-casos">
+    <div id="casos-lista">
+      <div class="bar2">
+        <input type="search" id="q" placeholder="Buscar por número, nombre, patente o teléfono">
+        <select id="f-estado"><option value="">Todos los estados</option><option value="nuevo">Nuevos</option><option value="revision">En revisión</option><option value="tomado">Tomados</option><option value="descartado">Descartados</option></select>
+        <label><input type="checkbox" id="f-pend"> Denuncia pendiente</label>
+      </div>
+      <div class="lista" id="lista"></div>
+    </div>
+    <div id="casos-det" hidden></div>
+  </div>
+
+  <div id="t-consultas" hidden><div class="lista" id="consultas"></div></div>
+
+  <div id="t-equipo" hidden>
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="margin:0 0 .8rem">Agregar usuario</h3>
+      <form id="f-nuevo" class="grid2" novalidate style="align-items:end">
+        <div class="field" style="margin:0"><label for="n-nombre">Nombre</label><input id="n-nombre" required></div>
+        <div class="field" style="margin:0"><label for="n-email">Correo</label><input id="n-email" type="email" required></div>
+        <div class="field" style="margin:0"><label for="n-rol">Permisos</label><select id="n-rol"><option value="miembro">Miembro: ve y actualiza casos</option><option value="admin">Administrador: además gestiona usuarios</option></select></div>
+        <button class="btn btn-primary" type="submit">Crear usuario</button>
+      </form>
+      <p class="msg" id="n-msg" role="status" style="text-align:left"></p>
+      <div id="n-ok" hidden style="margin-top:.6rem">
+        <p style="margin:0 0 .4rem">Contraseña temporal (se muestra una sola vez):</p>
+        <span class="clave" id="n-clave"></span>
+        <div class="actions" style="margin-top:.8rem"><a class="btn btn-wa btn-s" id="n-wa" target="_blank" rel="noopener">Enviarla por WhatsApp</a><button class="btn btn-ghost btn-s" type="button" id="n-copy">Copiar mensaje</button></div>
+      </div>
+    </div>
+    <div class="tabla-w"><table class="tabla"><thead><tr><th>Nombre</th><th>Correo</th><th>Permisos</th><th>Estado</th><th></th></tr></thead><tbody id="equipo"></tbody></table></div>
+  </div>
+</section>
+</main>
+
+<script>
+(function(){
+  var U="https://hfwqpjmbqsjtdyeajhqv.supabase.co", K="sb_publishable_bVyhboFI2QwZqvKTOF9Quw_klcuXkdV";
+  var S=null, YO=null, PAS={}, CASOS=[];
+  var ETAPAS=["Relevamiento pericial","Reclamo extrajudicial","Mediación prejudicial","Acuerdo y cobro","Litigio selectivo","Rendición"];
+  var ESTADOS={nuevo:"Nuevo",revision:"En revisión",tomado:"Tomado",descartado:"Descartado"};
+  var $=function(id){return document.getElementById(id);};
+  function h(tag,attrs,kids){ var e=document.createElement(tag); attrs=attrs||{};
+    for(var k in attrs){ if(k==="text") e.textContent=attrs[k]; else if(k==="class") e.className=attrs[k]; else if(k.slice(0,2)==="on") e.addEventListener(k.slice(2),attrs[k]); else if(attrs[k]!=null) e.setAttribute(k,attrs[k]); }
+    (kids||[]).forEach(function(c){ if(c!=null) e.appendChild(typeof c==="string"?document.createTextNode(c):c); }); return e; }
+  function say(el,t,ok){ el.textContent=t; el.className="msg "+(ok?"ok":"err"); }
+  function fecha(iso){ if(!iso) return "—"; var d=new Date(iso.length===10?iso+"T12:00:00":iso); return d.toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"America/Argentina/Mendoza"}); }
+  function hora(iso){ return new Date(iso).toLocaleString("es-AR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit",timeZone:"America/Argentina/Mendoza"}); }
+  function hoy(){ return new Date(Date.now()-3*36e5).toISOString().slice(0,10); }
+  function wa(t){ var d=(t||"").replace(/\D/g,""); if(!d) return ""; if(d.indexOf("54")!==0){ d=d.replace(/^0/,""); d="549"+d; } return "https://wa.me/"+d; }
+
+  /* ---- sesión ---- */
+  function guardar(s){ S={at:s.access_token,rt:s.refresh_token,exp:Date.now()+(s.expires_in-60)*1000}; try{ sessionStorage.setItem("al_panel",JSON.stringify(S)); }catch(x){} }
+  function auth(path,body){ return fetch(U+"/auth/v1/"+path,{method:"POST",headers:{apikey:K,"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){ return r.json().then(function(j){ if(!r.ok) throw j; return j; }); }); }
+  function token(){ if(!S) return Promise.reject("sin sesión"); if(Date.now()<S.exp) return Promise.resolve(S.at);
+    return auth("token?grant_type=refresh_token",{refresh_token:S.rt}).then(function(j){ guardar(j); return S.at; }).catch(function(e){ salir(); throw e; }); }
+  function api(path,opt){ opt=opt||{}; return token().then(function(t){
+      return fetch(U+path,{method:opt.method||"GET",headers:Object.assign({apikey:K,Authorization:"Bearer "+t,"Content-Type":"application/json"},opt.headers||{}),body:opt.body?JSON.stringify(opt.body):undefined}); })
+    .then(function(r){ if(r.status===401){ salir(); throw new Error("Sesión vencida"); } return r.text().then(function(x){ var j=x?JSON.parse(x):null; if(!r.ok) throw new Error((j&&(j.message||j.error))||("Error "+r.status)); return j; }); }); }
+  function salir(){ S=null; YO=null; try{ sessionStorage.removeItem("al_panel"); }catch(x){} vista("login"); $("who").textContent=""; $("salir").hidden=true; }
+  function vista(v){ ["login","clave","app"].forEach(function(x){ $("v-"+x).hidden=x!==v; }); }
+
+  $("f-login").addEventListener("submit",function(e){ e.preventDefault(); var m=$("l-msg");
+    say(m,"Entrando…",true);
+    auth("token?grant_type=password",{email:$("l-email").value.trim(),password:$("l-pass").value})
+      .then(function(j){ guardar(j); $("l-pass").value=""; return iniciar(); })
+      .catch(function(){ say(m,"Correo o contraseña incorrectos.",false); }); });
+  $("salir").addEventListener("click",function(){ token().then(function(t){ fetch(U+"/auth/v1/logout",{method:"POST",headers:{apikey:K,Authorization:"Bearer "+t}}); }).catch(function(){}); salir(); });
+
+  $("f-clave").addEventListener("submit",function(e){ e.preventDefault(); var m=$("c-msg"), a=$("c-1").value, b=$("c-2").value;
+    if(a.length<10) return say(m,"Tiene que tener al menos 10 caracteres.",false);
+    if(a!==b) return say(m,"Las dos contraseñas no coinciden.",false);
+    token().then(function(t){ return fetch(U+"/auth/v1/user",{method:"PUT",headers:{apikey:K,Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({password:a})}); })
+      .then(function(r){ if(!r.ok) return r.json().then(function(j){ throw new Error(j.msg||j.message||"No se pudo guardar"); }); return api("/rest/v1/rpc/clave_cambiada",{method:"POST",body:{}}); })
+      .then(function(){ $("c-1").value=$("c-2").value=""; YO.debe_cambiar=false; entrar(); })
+      .catch(function(err){ say(m,/weak|pwned|leaked/i.test(err.message)?"Esa contraseña es débil o apareció en filtraciones. Elegí otra.":err.message,false); }); });
+
+  function iniciar(){ return api("/rest/v1/rpc/mi_perfil",{method:"POST",body:{}}).then(function(a){
+      if(!a||!a.length){ salir(); say($("l-msg"),"Tu usuario no tiene acceso al panel. Pedile el alta a un administrador.",false); return; }
+      YO=a[0]; $("who").textContent=YO.nombre; $("salir").hidden=false;
+      if(YO.debe_cambiar){ vista("clave"); return; } entrar(); }); }
+  function entrar(){ vista("app"); $("tab-equipo").hidden=YO.rol!=="admin"; cargarCasos(); }
+
+  /* ---- pestañas ---- */
+  [].forEach.call(document.querySelectorAll("[data-tab]"),function(b){ b.addEventListener("click",function(){ tab(b.dataset.tab); }); });
+  function tab(n){ [].forEach.call(document.querySelectorAll("[data-tab]"),function(b){ b.setAttribute("aria-selected",b.dataset.tab===n?"true":"false"); });
+    ["casos","consultas","equipo"].forEach(function(x){ $("t-"+x).hidden=x!==n; });
+    if(n==="consultas") cargarConsultas(); if(n==="equipo") cargarEquipo(); if(n==="casos"){ $("casos-det").hidden=true; $("casos-lista").hidden=false; } }
+
+  /* ---- casos ---- */
+  function cargarCasos(){
+    $("lista").replaceChildren(h("p",{class:"mini",text:"Cargando casos…"}));
+    Promise.all([
+      api("/rest/v1/siniestros_web?select=*,seguimientos(codigo,etapa,proximo_paso,ultimo_movimiento)&order=creado_en.desc&limit=1000"),
+      api("/rest/v1/pas_links?select=codigo,nombre,broker,telefono,email,matricula")
+    ]).then(function(r){ CASOS=r[0]||[]; PAS={}; (r[1]||[]).forEach(function(p){ PAS[p.codigo]=p; }); pintarLista();
+      var q=new URLSearchParams(location.search).get("caso"); if(q){ var c=CASOS.find(function(x){return x.numero===q;}); if(c) detalle(c); history.replaceState(null,"","/panel"); }
+    }).catch(function(e){ $("lista").replaceChildren(h("p",{class:"err",text:"No se pudieron cargar los casos: "+e.message})); }); }
+  ["q","f-estado","f-pend"].forEach(function(id){ $(id).addEventListener("input",pintarLista); });
+  function pintarLista(){ var q=$("q").value.trim().toLowerCase(), est=$("f-estado").value, pend=$("f-pend").checked, ul=$("lista");
+    var l=CASOS.filter(function(c){ if(est&&(c.estado||"nuevo")!==est) return false; if(pend&&c.denuncia_hecha) return false;
+      if(!q) return true; return [c.numero,c.asegurado_nombre,c.dominio,c.asegurado_telefono,c.tercero_dominio].join(" ").toLowerCase().indexOf(q)>=0; });
+    ul.replaceChildren();
+    if(!l.length){ ul.appendChild(h("p",{class:"vacio",text:CASOS.length?"No hay casos con ese filtro.":"Todavía no entraron casos. Cuando alguien cargue un siniestro, aparece acá."})); return; }
+    l.forEach(function(c){ var s=(c.seguimientos||[])[0], p=PAS[c.pas_codigo];
+      var small=h("small",{text:"Cargado "+hora(c.creado_en)+" · siniestro del "+fecha(c.fecha_siniestro)+" · "+(p?(p.broker||p.nombre):"sin productor")+" · origen "+(c.origen||"web")+(s?" · etapa "+s.etapa:"")});
+      ul.appendChild(h("button",{class:"fila",type:"button",onclick:function(){ detalle(c); }},[
+        h("span",{class:"n",text:c.numero||"sin número"}),
+        h("span",{class:"q",text:c.asegurado_nombre}),
+        h("span",{},[ h("span",{class:"tag t-est",text:ESTADOS[c.estado]||c.estado||"Nuevo"}), c.denuncia_hecha?null:h("span",{class:"tag t-pend",text:"denuncia pendiente"}), c.hubo_lesiones?h("span",{class:"tag t-les",text:"lesionados"}):null ]),
+        small])); }); }
+
+  function dl(pares){ var d=h("dl"); pares.forEach(function(p){ if(p[1]===null||p[1]===undefined||p[1]==="") return; d.appendChild(h("dt",{text:p[0]})); d.appendChild(h("dd",{},[p[1]])); }); if(!d.children.length) d.appendChild(h("dd",{class:"mini",style:"grid-column:1/3",text:"Sin datos cargados."})); return d; }
+  function detalle(c){ var s=(c.seguimientos||[])[0], p=PAS[c.pas_codigo], box=$("casos-det");
+    $("casos-lista").hidden=true; box.hidden=false; window.scrollTo(0,0);
+    var si=function(b){ return b?"Sí":"No"; };
+    var waC=wa(c.asegurado_telefono);
+    var fot=h("div",{class:"fotos"}); var fotosCard=h("div",{class:"card"},[h("h3",{text:"Fotos y documentos ("+(c.fotos||[]).length+")"}),fot]);
+    if(!(c.fotos||[]).length) fot.appendChild(h("p",{class:"mini",text:"No subió archivos."}));
+    else api("/storage/v1/object/sign/siniestros",{method:"POST",body:{expiresIn:900,paths:c.fotos}}).then(function(a){
+      (a||[]).forEach(function(x){ if(!x.signedURL) return; var url=U+"/storage/v1"+x.signedURL, nom=x.path.split("/").pop(), pdf=/\.pdf$/i.test(nom);
+        fot.appendChild(h("a",{href:url,target:"_blank",rel:"noopener"},[ pdf?h("div",{class:"pdf",style:"height:100%",text:"PDF"}):h("img",{src:url,alt:nom,loading:"lazy"}), h("span",{text:nom.replace(/\.\w+$/,"")}) ])); }); })
+      .catch(function(e){ fot.appendChild(h("p",{class:"err",text:"No se pudieron abrir los archivos: "+e.message})); });
+
+    var selEt=h("select",{id:"d-etapa"}); ETAPAS.forEach(function(t,i){ var o=h("option",{value:i+1,text:(i+1)+". "+t}); if(s&&s.etapa===i+1) o.selected=true; selEt.appendChild(o); });
+    var selEs=h("select",{id:"d-estado"}); Object.keys(ESTADOS).forEach(function(k){ var o=h("option",{value:k,text:ESTADOS[k]}); if((c.estado||"nuevo")===k) o.selected=true; selEs.appendChild(o); });
+    var prox=h("textarea",{id:"d-prox",rows:"3"}); prox.value=s?(s.proximo_paso||""):"";
+    var notas=h("textarea",{id:"d-notas",rows:"4",placeholder:"Solo las ve el equipo"}); notas.value=c.notas_internas||"";
+    var msg=h("p",{class:"msg",role:"status",style:"text-align:left"});
+    var guardarBtn=h("button",{class:"btn btn-primary",type:"button",text:"Guardar cambios",onclick:function(){
+      guardarBtn.disabled=true; say(msg,"Guardando…",true);
+      var ps=[api("/rest/v1/siniestros_web?id=eq."+c.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{estado:selEs.value,notas_internas:notas.value.trim()||null}})];
+      if(s) ps.push(api("/rest/v1/seguimientos?codigo=eq."+encodeURIComponent(s.codigo),{method:"PATCH",headers:{Prefer:"return=minimal"},body:{etapa:+selEt.value,proximo_paso:prox.value.trim()||null,ultimo_movimiento:hoy()}}));
+      Promise.all(ps).then(function(){ c.estado=selEs.value; c.notas_internas=notas.value.trim()||null; if(s){ s.etapa=+selEt.value; s.proximo_paso=prox.value.trim(); s.ultimo_movimiento=hoy(); }
+        say(msg,"Guardado. El cliente y el productor ya ven la etapa nueva.",true); guardarBtn.disabled=false; })
+      .catch(function(e){ say(msg,"No se pudo guardar: "+e.message,false); guardarBtn.disabled=false; }); }});
+    var segUrl=s?location.origin+"/seguimiento?c="+s.codigo:null;
+
+    box.replaceChildren(h("div",{class:"det"},[
+      h("button",{class:"btn btn-ghost btn-s",type:"button",text:"← Volver a la lista",onclick:function(){ box.hidden=true; $("casos-lista").hidden=false; pintarLista(); }}),
+      h("div",{style:"margin:16px 0 14px"},[ h("h2",{text:(c.numero||"Sin número")+" · "+c.asegurado_nombre}),
+        h("p",{class:"mini",text:"Cargado el "+hora(c.creado_en)+" · origen "+(c.origen||"web")}),
+        h("div",{class:"actions",style:"margin-top:.6rem"},[ waC?h("a",{class:"btn btn-wa btn-s",href:waC,target:"_blank",rel:"noopener",text:"WhatsApp al cliente"}):null,
+          segUrl?h("a",{class:"btn btn-ghost btn-s",href:segUrl,target:"_blank",rel:"noopener",text:"Ver su seguimiento"}):null ]) ]),
+      h("div",{class:"grid2"},[
+        h("div",{class:"card"},[ h("h3",{text:"Avance del caso"}),
+          h("div",{class:"field"},[h("label",{for:"d-estado",text:"Estado interno"}),selEs]),
+          h("div",{class:"field"},[h("label",{for:"d-etapa",text:"Etapa que ve el cliente"}),selEt]),
+          h("div",{class:"field"},[h("label",{for:"d-prox",text:"Próximo paso (lo ve el cliente)"}),prox]),
+          h("div",{class:"field"},[h("label",{for:"d-notas",text:"Notas internas"}),notas]),
+          guardarBtn, msg ]),
+        h("div",{class:"card"},[ h("h3",{text:"Cliente"}), dl([["Nombre",c.asegurado_nombre],["DNI",c.asegurado_dni],["Celular",c.asegurado_telefono],["Correo",c.asegurado_email],["Patente",c.dominio],["Su seguro",c.aseguradora_propia],["Denuncia al seguro",c.denuncia_hecha?"Hecha":"PENDIENTE"],["Productor",p?(p.nombre+(p.broker?" · "+p.broker:"")+(p.telefono?" · "+p.telefono:"")):"Sin productor"]]) ]),
+        h("div",{class:"card"},[ h("h3",{text:"Siniestro"}), dl([["Fecha",fecha(c.fecha_siniestro)+(c.hora?" · "+c.hora:"")],["Lugar",c.lugar],["Relato",c.relato],["Lesionados",si(c.hubo_lesiones)+(c.hubo_lesiones?(c.consentimiento_salud?" (con consentimiento)":" (sin consentimiento expreso)"):"")],["Policía",si(c.intervino_policia)]]) ]),
+        h("div",{class:"card"},[ h("h3",{text:"El otro vehículo"}), dl([["Patente",c.tercero_dominio],["Conductor",c.tercero_nombre],["Teléfono",c.tercero_telefono],["Compañía",c.tercero_aseguradora],["Póliza",c.tercero_poliza]]) ]),
+      ]),
+      h("div",{style:"margin-top:16px"},[fotosCard])
+    ])); }
+
+  /* ---- consultas ---- */
+  function cargarConsultas(){ var ul=$("consultas"); ul.replaceChildren(h("p",{class:"mini",text:"Cargando…"}));
+    api("/rest/v1/consultas?select=*&order=creado_en.desc&limit=500").then(function(a){ ul.replaceChildren();
+      if(!a.length){ ul.appendChild(h("p",{class:"vacio",text:"Todavía no entraron consultas por el formulario."})); return; }
+      a.forEach(function(c){ var sel=h("select",{style:"width:auto"}); ["nueva","respondida","convertida","descartada"].forEach(function(k){ var o=h("option",{value:k,text:k[0].toUpperCase()+k.slice(1)}); if(c.estado===k) o.selected=true; sel.appendChild(o); });
+        sel.addEventListener("change",function(){ api("/rest/v1/consultas?id=eq."+c.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{estado:sel.value}}).catch(function(e){ alert("No se pudo guardar: "+e.message); }); });
+        var w=wa(c.telefono);
+        ul.appendChild(h("div",{class:"card"},[ h("div",{style:"display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"},[ h("b",{text:c.nombre+" · "+c.tipo}), sel ]),
+          h("p",{class:"mini",style:"margin:.2rem 0 .6rem",text:hora(c.creado_en)+" · "+c.email+(c.telefono?" · "+c.telefono:"")+" · origen "+(c.origen||"web")}),
+          h("p",{style:"margin:0 0 .6rem;white-space:pre-wrap",text:c.mensaje}),
+          h("div",{class:"actions",style:"margin-top:0"},[ w?h("a",{class:"btn btn-wa btn-s",href:w,target:"_blank",rel:"noopener",text:"WhatsApp"}):null, h("a",{class:"btn btn-ghost btn-s",href:"mailto:"+c.email,text:"Responder por correo"}) ]) ])); }); })
+      .catch(function(e){ ul.replaceChildren(h("p",{class:"err",text:e.message})); }); }
+
+  /* ---- equipo ---- */
+  function fn(body){ return token().then(function(t){ return fetch(U+"/functions/v1/equipo",{method:"POST",headers:{apikey:K,Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify(body)}); })
+    .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.error||"Error"); return j; }); }); }
+  function mostrarClave(nombre,email,clave){ $("n-ok").hidden=false; $("n-clave").textContent=clave;
+    var txt="Hola "+nombre.split(" ")[0]+", te di de alta en el panel de AuxilioLegal.\nEntrá en "+location.origin+"/panel\nUsuario: "+email+"\nContraseña temporal: "+clave+"\nAl entrar te va a pedir que elijas una propia.";
+    $("n-wa").href="https://wa.me/?text="+encodeURIComponent(txt); $("n-copy").onclick=function(){ (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){ $("n-copy").textContent="Copiado"; }).catch(function(){}); }; }
+  function cargarEquipo(){ var tb=$("equipo"); tb.replaceChildren();
+    api("/rest/v1/equipo?select=*&order=creado_en").then(function(a){ a.forEach(function(m){
+      tb.appendChild(h("tr",{},[ h("td",{text:m.nombre}), h("td",{text:m.email}), h("td",{text:m.rol==="admin"?"Administrador":"Miembro"}),
+        h("td",{text:m.activo?(m.debe_cambiar?"Activo · falta elegir contraseña":"Activo"):"Desactivado"}),
+        h("td",{},[ h("button",{class:"btn btn-ghost btn-s",type:"button",text:"Nueva clave",onclick:function(){ if(!confirm("¿Generar una contraseña temporal nueva para "+m.nombre+"?")) return;
+            fn({accion:"reclave",user_id:m.user_id}).then(function(j){ mostrarClave(m.nombre,m.email,j.clave_temporal); window.scrollTo(0,0); cargarEquipo(); }).catch(function(e){ alert(e.message); }); }}),
+          " ", h("button",{class:"btn btn-ghost btn-s",type:"button",text:m.activo?"Desactivar":"Activar",onclick:function(){
+            fn({accion:"activo",user_id:m.user_id,activo:!m.activo}).then(cargarEquipo).catch(function(e){ alert(e.message); }); }}) ]) ])); }); })
+      .catch(function(e){ tb.replaceChildren(h("tr",{},[h("td",{colspan:"5",class:"err",text:e.message})])); }); }
+  $("f-nuevo").addEventListener("submit",function(e){ e.preventDefault(); var m=$("n-msg"), nombre=$("n-nombre").value.trim(), email=$("n-email").value.trim();
+    if(nombre.length<2||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return say(m,"Completá nombre y un correo válido.",false);
+    say(m,"Creando…",true); $("n-ok").hidden=true;
+    fn({accion:"crear",nombre:nombre,email:email,rol:$("n-rol").value}).then(function(j){ say(m,"Listo. Pasale estos datos: la contraseña no se vuelve a mostrar.",true); mostrarClave(nombre,email.toLowerCase(),j.clave_temporal); $("f-nuevo").reset(); cargarEquipo(); })
+      .catch(function(err){ say(m,err.message,false); }); });
+
+  /* ---- arranque ---- */
+  try{ S=JSON.parse(sessionStorage.getItem("al_panel")||"null"); }catch(x){ S=null; }
+  if(S) iniciar().catch(function(){ salir(); }); else vista("login");
+})();
+</script>
+</body>
+</html>

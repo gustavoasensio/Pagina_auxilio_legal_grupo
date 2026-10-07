@@ -3,5 +3,6 @@ Allow: /
 Disallow: /s
 Disallow: /seguimiento
 Disallow: /api/
+Disallow: /panel
 
 Sitemap: https://auxiliolegal.com.ar/sitemap.xml

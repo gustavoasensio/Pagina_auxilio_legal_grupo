@@ -139,7 +139,7 @@
   document.getElementById("otra").addEventListener("click",function(){ if(last) pdf(last.d); });
   document.getElementById("derivar").addEventListener("click",function(){
     var b=this, m=document.getElementById("msg2"); if(!last) return; b.disabled=true;
-    post("notas_pas",last.row).catch(function(){}).then(function(){ return post("consultas",{nombre:last.d.pas_nombre,email:last.d.pas_email,telefono:last.d.pas_telefono||null,tipo:"Derivación de PAS",
+    post("notas_pas",last.row).catch(function(){}).then(function(){ return post("consultas",{nombre:last.d.pas_nombre,email:last.d.pas_email,telefono:last.d.pas_telefono||null,tipo:"Soy Productor Asesor de Seguros",
       mensaje:"Derivación desde nota"+(last.id?" "+last.id:"")+". Asegurado: "+last.d.asegurado_nombre+". Compañía: "+last.d.aseguradora_destino+".",consentimiento:true,origen:"pas-nota"}); })
     .then(function(r){ if(r.ok){ say(m,"Listo, recibimos la derivación. Te contactamos dentro de las 48 h hábiles.",true); b.textContent="Caso derivado"; } else { b.disabled=false; say(m,"No pudimos enviarla. Escribinos por WhatsApp al 261 633-4179.",false); } })
     .catch(function(){ b.disabled=false; say(m,"No pudimos enviarla. Escribinos por WhatsApp al 261 633-4179.",false); });

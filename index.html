@@ -153,9 +153,9 @@
         <div class="field">
           <label for="tipo">¿Desde dónde escribís?</label>
           <select id="tipo" name="tipo">
-            <option>Tuve un siniestro</option>
-            <option>Soy productor de seguros</option>
-            <option>Otra consulta</option>
+            <option value="Soy damnificado en un siniestro">Tuve un siniestro</option>
+            <option value="Soy Productor Asesor de Seguros">Soy productor de seguros</option>
+            <option value="Otra consulta">Otra consulta</option>
           </select>
         </div>
         <div class="field">
@@ -237,6 +237,8 @@
     e.preventDefault();
     var nombre=f.nombre.value.trim(), email=f.email.value.trim(), mensaje=f.mensaje.value.trim();
     if(!nombre||!email||!mensaje){ say("Completá nombre, correo y tu consulta.",false); return; }
+    if(mensaje.length<5){ say("Contanos un poco más en la consulta.",false); return; }
+    if(nombre.length>120||mensaje.length>4000){ say("El texto es demasiado largo.",false); return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ say("Revisá el correo, parece incompleto.",false); return; }
     if(f.empresa.value){ f.reset(); say("Listo, recibimos tu consulta.",true); return; }
     if(f.telefono.value.trim() && f.telefono.value.replace(/\D/g,"").length<8){ say("Revisá el teléfono: poné la característica y el número.",false); return; }
