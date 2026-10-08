@@ -1,0 +1,86 @@
+name: Backup nocturno a Drive
+
+# Todas las noches (02:37 hora de Mendoza) respalda la base y los archivos de Supabase,
+# cifrados con age, en Google Drive. También se puede lanzar a mano desde la pestaña Actions.
+on:
+  schedule:
+    - cron: "37 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PROJECT_REF: hfwqpjmbqsjtdyeajhqv
+      RCLONE_LOG_LEVEL: ERROR
+      RCLONE_RETRIES: "5"
+      # Remoto "sb": Storage de Supabase por su API compatible con S3
+      RCLONE_CONFIG_SB_TYPE: s3
+      RCLONE_CONFIG_SB_PROVIDER: Other
+      RCLONE_CONFIG_SB_ENDPOINT: https://hfwqpjmbqsjtdyeajhqv.storage.supabase.co/storage/v1/s3
+      RCLONE_CONFIG_SB_REGION: sa-east-1
+      RCLONE_CONFIG_SB_FORCE_PATH_STYLE: "true"
+      RCLONE_CONFIG_SB_ACCESS_KEY_ID: ${{ secrets.SUPABASE_S3_KEY_ID }}
+      RCLONE_CONFIG_SB_SECRET_ACCESS_KEY: ${{ secrets.SUPABASE_S3_SECRET }}
+      # Remoto "gd": Google Drive, limitado a los archivos que crea rclone (scope drive.file)
+      RCLONE_CONFIG_GD_TYPE: drive
+      RCLONE_CONFIG_GD_SCOPE: drive.file
+      RCLONE_CONFIG_GD_TOKEN: ${{ secrets.RCLONE_DRIVE_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verificar configuración
+        env:
+          AGE_RECIPIENT: ${{ vars.AGE_RECIPIENT }}
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          faltan=""
+          [[ "$AGE_RECIPIENT" == age1* ]] || faltan+=" AGE_RECIPIENT(variable)"
+          [[ -n "$SUPABASE_DB_URL" ]] || faltan+=" SUPABASE_DB_URL"
+          [[ -n "$RCLONE_CONFIG_SB_ACCESS_KEY_ID" ]] || faltan+=" SUPABASE_S3_KEY_ID"
+          [[ -n "$RCLONE_CONFIG_SB_SECRET_ACCESS_KEY" ]] || faltan+=" SUPABASE_S3_SECRET"
+          [[ -n "$RCLONE_CONFIG_GD_TOKEN" ]] || faltan+=" RCLONE_DRIVE_TOKEN"
+          if [[ -n "$faltan" ]]; then echo "::error::Falta configurar:$faltan"; exit 1; fi
+
+      - name: Instalar age y rclone
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq age
+          curl -fsSL https://rclone.org/install.sh | sudo bash > /dev/null
+          rclone version | head -1
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Mantener activo el proyecto de Supabase
+        # El plan gratuito pausa el proyecto tras 7 días sin actividad.
+        run: |
+          curl -fsS -X POST "https://${PROJECT_REF}.supabase.co/rest/v1/rpc/pas_publico" \
+            -H "apikey: sb_publishable_bVyhboFI2QwZqvKTOF9Quw_klcuXkdV" \
+            -H "Content-Type: application/json" -d '{"p_codigo":"keepalive00"}' > /dev/null
+
+      - name: Backup cifrado a Drive
+        env:
+          AGE_RECIPIENT: ${{ vars.AGE_RECIPIENT }}
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: bash .github/backup/backup.sh
+
+      - name: Avisar si falló
+        if: failure()
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          [[ -z "$NTFY_TOPIC" ]] && exit 0
+          curl -fsS -H "Title: Backup AuxilioLegal FALLÓ" -H "Priority: high" -H "Tags: warning" \
+            -H "Click: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            -d "El backup nocturno no se completó. Revisar el registro en GitHub Actions." \
+            "https://ntfy.sh/${NTFY_TOPIC}"
