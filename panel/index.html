@@ -24,6 +24,7 @@ main section{padding:0}
 .tabs{display:flex;gap:4px;margin:18px 0 14px;border-bottom:1px solid var(--line)}
 .tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:.6rem .9rem;font:inherit;font-weight:650;color:var(--muted);cursor:pointer}
 .tabs button[aria-selected=true]{color:var(--navy);border-bottom-color:var(--road)}
+.tabs .tab-link{margin-left:auto;align-self:center;padding:.4rem .8rem;font-weight:650;font-size:.9rem;color:var(--navy);text-decoration:none;border:1px solid var(--line);border-radius:8px;margin-bottom:6px}
 .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
 .login{max-width:400px;margin:56px auto}
 .login h1{font-size:1.8rem;max-width:none;margin-bottom:1rem}
@@ -93,6 +94,7 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
     <button role="tab" data-tab="casos" aria-selected="true">Casos</button>
     <button role="tab" data-tab="consultas" aria-selected="false">Consultas</button>
     <button role="tab" data-tab="equipo" aria-selected="false" id="tab-equipo" hidden>Equipo</button>
+    <a class="tab-link" href="/nota">Nota de reclamo</a>
   </div>
 
   <div id="t-casos">
