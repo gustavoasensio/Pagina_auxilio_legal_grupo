@@ -251,6 +251,7 @@ dt{color:var(--muted)} dd{margin:0;color:var(--ink);word-break:break-word}
             window.open(waC+"?text="+encodeURIComponent(txt),"_blank");
             api("/rest/v1/siniestros_web?id=eq."+c.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:{bienvenida_wa_en:new Date().toISOString()}})
               .then(function(){ c.bienvenida_wa_en=new Date().toISOString(); btn.textContent="Bienvenida enviada"; btn.disabled=true; }).catch(function(){}); }}):null,
+          c.numero?h("a",{class:"btn btn-road btn-s",href:"/nota?caso="+encodeURIComponent(c.numero),text:"Nota de reclamo"}):null,
           segUrl?h("a",{class:"btn btn-ghost btn-s",href:segUrl,target:"_blank",rel:"noopener",text:"Ver su seguimiento"}):null,
           (segUrl&&waC)?h("button",{class:"btn btn-wa btn-s",type:"button",text:"Mandarle su seguimiento",onclick:function(){
             var et=s?(+selEt.value):1, px=prox.value.trim();
