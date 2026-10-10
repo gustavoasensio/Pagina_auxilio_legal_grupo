@@ -18,9 +18,13 @@
 <main>
 <section class="tool"><div class="wrap doc">
 <h1>Nota de reclamo a la compañía.</h1>
-<p class="sub">Uso interno del equipo. Cargá los datos del caso y descargá la nota lista para firmar y presentar, para abrir el reclamo y acelerar el trámite en la compañía del tercero.</p>
+<p class="sub">Uso interno del equipo. Elegí el caso, revisá los datos y descargá la nota lista para firmar y presentar, para abrir el reclamo y acelerar el trámite en la compañía del tercero.</p>
 
 <form id="nota" class="contact-box" novalidate>
+  <fieldset><legend>Caso</legend>
+    <div class="field"><label for="caso">Elegí el caso y se completan los datos</label><select id="caso"><option value="">Cargando casos…</option></select></div>
+    <p id="caso-msg" role="status" aria-live="polite" style="margin:.2rem 0 0;font-size:.88rem;color:var(--steel)"></p>
+  </fieldset>
   <fieldset><legend>Productor</legend>
     <div class="row2">
       <div class="field"><label for="pas_nombre">Nombre y apellido *</label><input id="pas_nombre" required autocomplete="name"></div>
@@ -138,6 +142,43 @@
     .then(function(r){ if(r.ok){ say(m,"Listo, recibimos la derivación. Te contactamos dentro de las 48 h hábiles.",true); b.textContent="Caso derivado"; } else { b.disabled=false; say(m,"No pudimos enviarla. Escribinos por WhatsApp al 261 633-4179.",false); } })
     .catch(function(){ b.disabled=false; say(m,"No pudimos enviarla. Escribinos por WhatsApp al 261 633-4179.",false); });
   });
+})();
+</script>
+<script>
+/* Uso interno: elegir un caso de la base y completar la nota con sus datos */
+(function(){
+  var U="https://hfwqpjmbqsjtdyeajhqv.supabase.co", K="sb_publishable_bVyhboFI2QwZqvKTOF9Quw_klcuXkdV";
+  var sel=document.getElementById("caso"), msg=document.getElementById("caso-msg"), CASOS=[], PAS={};
+  function ses(){ try{ return JSON.parse(sessionStorage.getItem("al_panel")||"null"); }catch(e){ return null; } }
+  function token(){ var s=ses(); if(!s) return Promise.reject(new Error("Sin sesión: entrá desde el panel."));
+    if(Date.now()<s.exp) return Promise.resolve(s.at);
+    return fetch(U+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:K,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:s.rt})})
+      .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error("La sesión venció: volvé a entrar al panel.");
+        var n={at:j.access_token,rt:j.refresh_token,exp:Date.now()+(j.expires_in-60)*1000}; try{ sessionStorage.setItem("al_panel",JSON.stringify(n)); }catch(e){} return n.at; }); }); }
+  function api(p){ return token().then(function(t){ return fetch(U+"/rest/v1/"+p,{headers:{apikey:K,Authorization:"Bearer "+t}}); })
+    .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error((j&&j.message)||("Error "+r.status)); return j; }); }); }
+  function set(id,val){ var e=document.getElementById(id); if(!e) return; if(e.type==="checkbox") e.checked=!!val; else e.value=(val==null?"":val); }
+  function fecha(iso){ if(!iso) return ""; var p=String(iso).slice(0,10).split("-"); return p[2]+"/"+p[1]+"/"+p[0]; }
+  function opcion(v,t){ var o=document.createElement("option"); o.value=v; o.textContent=t; return o; }
+  function llenar(c){ var p=PAS[c.pas_codigo]||{};
+    set("pas_nombre",p.nombre); set("pas_matricula",p.matricula); set("pas_email",p.email); set("pas_telefono",p.telefono);
+    set("asegurado_nombre",c.asegurado_nombre); set("asegurado_dni",c.asegurado_dni); set("asegurado_telefono",c.asegurado_telefono); set("dominio_propio",c.dominio);
+    set("fecha_siniestro",c.fecha_siniestro); set("lugar",c.lugar); set("relato",c.relato); set("hubo_lesiones",c.hubo_lesiones);
+    set("aseguradora_destino",c.tercero_aseguradora); set("poliza_tercero",c.tercero_poliza); set("dominio_tercero",c.tercero_dominio); set("conductor_tercero",c.tercero_nombre);
+    var falta=[]; if(!p.nombre) falta.push("datos del productor"); if(!c.tercero_aseguradora) falta.push("compañía del tercero"); if(!c.fecha_siniestro) falta.push("fecha del siniestro");
+    msg.textContent="Caso "+(c.numero||"")+" cargado. "+(falta.length?"Falta completar: "+falta.join(", ")+". ":"")+"Revisá los datos y completá los daños.";
+  }
+  Promise.all([
+    api("siniestros_web?select=id,numero,pas_codigo,asegurado_nombre,asegurado_dni,asegurado_telefono,dominio,fecha_siniestro,lugar,relato,hubo_lesiones,tercero_aseguradora,tercero_poliza,tercero_dominio,tercero_nombre,creado_en&order=creado_en.desc&limit=500"),
+    api("pas_links?select=codigo,nombre,matricula,email,telefono")
+  ]).then(function(r){
+    CASOS=r[0]||[]; (r[1]||[]).forEach(function(p){ PAS[p.codigo]=p; });
+    sel.replaceChildren(opcion("",CASOS.length?"— Elegí un caso —":"No hay casos cargados"));
+    CASOS.forEach(function(c){ sel.appendChild(opcion(c.id,(c.numero||"Sin número")+" · "+(c.asegurado_nombre||"")+(c.fecha_siniestro?" · "+fecha(c.fecha_siniestro):""))); });
+    var q=new URLSearchParams(location.search).get("caso");
+    if(q){ var c=CASOS.find(function(x){ return x.numero===q; }); if(c){ sel.value=c.id; llenar(c); } }
+  }).catch(function(e){ sel.replaceChildren(opcion("","No se pudieron cargar los casos")); msg.textContent=e.message; });
+  sel.addEventListener("change",function(){ var c=CASOS.find(function(x){ return x.id===sel.value; }); if(c) llenar(c); });
 })();
 </script>
 </body>
