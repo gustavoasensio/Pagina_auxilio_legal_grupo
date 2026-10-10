@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nota de reclamo para productores — AuxilioLegal</title>
-<link rel="canonical" href="https://auxiliolegal.com.ar/nota">
-<meta name="description" content="Herramienta gratuita para Productores Asesores de Seguros: cargá el siniestro y descargá la nota de reclamo lista para presentar.">
+<title>Nota de reclamo (uso interno) — AuxilioLegal</title>
+<meta name="robots" content="noindex, nofollow">
+<script>/* Uso interno: solo con sesión del panel */try{var s=JSON.parse(sessionStorage.getItem("al_panel")||"null");if(!s||!s.rt)location.replace("/panel");}catch(e){location.replace("/panel");}</script>
 <link rel="icon" type="image/png" href="/assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,11 +14,11 @@
 </head>
 <body>
 <header><div class="wrap nav"><a class="brand" href="/"><img src="/assets/logo.png" alt="AuxilioLegal"></a>
-<a class="btn btn-ghost" href="/#productores">Volver</a></div></header>
+<a class="btn btn-ghost" href="/panel">Volver al panel</a></div></header>
 <main>
 <section class="tool"><div class="wrap doc">
-<h1>Nota de reclamo para tu asegurado.</h1>
-<p class="sub">Cargá los datos del siniestro y descargá la nota lista para presentar a la compañía. Gratis para cualquier productor, derive casos o no.</p>
+<h1>Nota de reclamo a la compañía.</h1>
+<p class="sub">Uso interno del equipo. Cargá los datos del caso y descargá la nota lista para firmar y presentar, para abrir el reclamo y acelerar el trámite en la compañía del tercero.</p>
 
 <form id="nota" class="contact-box" novalidate>
   <fieldset><legend>Productor</legend>
@@ -54,27 +54,22 @@
       <div class="field"><label for="conductor_tercero">Conductor del tercero</label><input id="conductor_tercero"></div>
     </div>
   </fieldset>
-  <label class="chk"><input id="acepta" type="checkbox"><span>Declaro contar con autorización del asegurado para cargar sus datos y acepto los <a href="#terminos">términos de uso</a>.</span></label>
+  <label class="chk"><input id="acepta" type="checkbox"><span>Confirmo que el asegurado autorizó el uso de sus datos para este reclamo.</span></label>
   <button class="btn btn-primary" id="go" type="submit">Generar nota en PDF</button>
   <p id="msg" role="status" aria-live="polite" class="msg"></p>
 </form>
 
 <div id="listo" class="contact-box done" hidden>
   <h2>Nota descargada.</h2>
-  <p>Hacela firmar por el asegurado y presentala con la documentación. Si la compañía no responde o la propuesta no alcanza, derivanos el caso y lo tomamos desde ahí.</p>
+  <p>Hacela firmar y presentala con la documentación. Registrá la fecha de presentación en el caso (Plazos → «Reclamo presentado a la aseguradora») para que corra el plazo de respuesta.</p>
   <div class="actions">
-    <button class="btn btn-primary" id="derivar" type="button">Derivar este caso a AuxilioLegal</button>
+    <button class="btn btn-primary" id="derivar" type="button" hidden>Derivar</button>
     <button class="btn btn-ghost" id="otra" type="button">Descargar de nuevo</button>
   </div>
   <p id="msg2" role="status" aria-live="polite" class="msg"></p>
 </div>
 
-<div id="terminos" class="terms">
-  <h2>Términos de uso</h2>
-  <p>La herramienta es gratuita y está disponible para cualquier Productor Asesor de Seguros, sin obligación de derivar casos ni contraprestación alguna.</p>
-  <p>La nota es una plantilla orientativa que presenta el asegurado, con intervención de su productor. No constituye patrocinio ni asesoramiento letrado sobre el caso.</p>
-  <p>Los datos se usan para armar el PDF en tu dispositivo. Solo se guardan en la base de AuxilioLegal si tocás «Derivar este caso», conforme la Ley 25.326 y nuestra <a href="/privacidad">política de privacidad</a>. Quien los carga declara contar con autorización de su titular.</p>
-</div>
+
 </div></section>
 </main>
 <footer><div class="wrap"><p style="font-size:.84rem;color:var(--steel)">© 2026 auxiliolegal.com.ar — <a href="/">Inicio</a> · <a href="/privacidad">Privacidad</a></p></div></footer>
@@ -115,7 +110,6 @@
     J.setLineWidth(.3); J.line(x,y,x+65,y); J.line(x+95,y,x+160,y); y+=5;
     J.setFontSize(9.5); J.text(d.asegurado_nombre,x,y); J.text(d.pas_nombre,x+95,y); y+=4.5;
     J.text("Asegurado",x,y); J.text("Productor Asesor de Seguros",x+95,y);
-    J.setFontSize(7.5); J.setTextColor(120); J.text("Nota generada con la herramienta gratuita de AuxilioLegal. Plantilla orientativa: no constituye patrocinio letrado.",x,288);
     J.save("Nota de reclamo - "+d.asegurado_nombre.replace(/[^\wÁÉÍÓÚáéíóúÑñ ]/g,"")+".pdf");
   }
 
@@ -126,7 +120,7 @@
     if(!d.pas_nombre||!d.pas_email||!d.asegurado_nombre||!d.fecha_siniestro||!d.aseguradora_destino){ say(m,"Completá los campos marcados con asterisco.",false); return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.pas_email)){ say(m,"Revisá el correo, parece incompleto.",false); return; }
     if(d.fecha_siniestro>AL_hoy()){ say(m,"La fecha del siniestro no puede ser posterior a hoy.",false); return; }
-    if(!v("acepta")){ say(m,"Necesitamos que aceptes los términos de uso.",false); return; }
+    if(!v("acepta")){ say(m,"Confirmá la autorización del asegurado.",false); return; }
     if(!window.jspdf){ say(m,"No se pudo cargar el generador. Recargá la página e intentá de nuevo.",false); return; }
     go.disabled=true; go.textContent="Generando...";
     var row={}; for(var k in d){ row[k]= d[k]===""?null:d[k]; } row.id=(crypto.randomUUID?crypto.randomUUID():null); if(!row.id) delete row.id; row.acepta_terminos=true;
