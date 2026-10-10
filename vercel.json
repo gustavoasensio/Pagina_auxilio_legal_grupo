@@ -8,7 +8,8 @@
   "redirects": [
     { "source": "/:path*", "has": [{ "type": "host", "value": "www.auxiliolegal.com.ar" }], "destination": "https://auxiliolegal.com.ar/:path*", "permanent": true },
     { "source": "/siniestro", "destination": "/choque", "permanent": false },
-    { "source": "/chocaste", "destination": "/choque", "permanent": false }
+    { "source": "/chocaste", "destination": "/choque", "permanent": false },
+    { "source": "/nota", "destination": "/enlace", "permanent": false }
   ],
   "headers": [
     { "source": "/(.*)", "headers": [
